@@ -16,7 +16,14 @@ async function deserializeUser(id) {
     },
   });
 }
+
+async function createUser(username, password) {
+  return prisma.user.create({
+    data: { username: username, password: password },
+  });
+}
 module.exports = {
   deserializeUser,
   findUser,
+  createUser,
 };
