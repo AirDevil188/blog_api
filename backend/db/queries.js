@@ -35,9 +35,25 @@ async function getAllUsers() {
   }
 }
 
+async function getUser(id) {
+  try {
+    return prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        username: true,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   deserializeUser,
   findUser,
   createUser,
   getAllUsers,
+  getUser,
 };
