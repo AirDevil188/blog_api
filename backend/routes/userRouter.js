@@ -9,4 +9,6 @@ userRouter.post("/log-in");
 
 userRouter.get("/users", userController.getAllUsers);
 
+userRouter.get("/users/:id", userController.getDetailsUser);
+
 module.exports = userRouter;
