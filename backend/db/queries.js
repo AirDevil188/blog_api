@@ -22,8 +22,22 @@ async function createUser(username, password) {
     data: { username: username, password: password },
   });
 }
+
+async function getAllUsers() {
+  try {
+    return prisma.user.findMany({
+      select: {
+        username: true,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   deserializeUser,
   findUser,
   createUser,
+  getAllUsers,
 };

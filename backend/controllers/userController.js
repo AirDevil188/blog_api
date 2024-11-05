@@ -41,6 +41,15 @@ const createUser = [
   }),
 ];
 
+const getAllUsers = asyncHandler(async (req, res, next) => {
+  const users = await db.getAllUsers();
+  if (users.length === 0) {
+    return res.status(404).json({ message: "There are no users!" });
+  }
+  res.json(users);
+});
+
 module.exports = {
   createUser,
+  getAllUsers,
 };
