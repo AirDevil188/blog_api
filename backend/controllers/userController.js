@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const db = require("../db/queries");
 const passport = require("passport");
+const jwt = require("../config/jwt");
 
 const validateUser = [
   body("username")
@@ -51,6 +52,7 @@ const logInUser = asyncHandler(async (req, res, next) => {
       return res.status(404).json({ message: "User not found!" });
     }
     req.login(user, { session: false });
+    jwt.generateToken(req.user, res);
   })(req, res, next);
 });
 
