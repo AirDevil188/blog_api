@@ -5,7 +5,7 @@ const userRouter = Router();
 
 userRouter.post("/sign-up", userController.createUser);
 
-userRouter.post("/log-in");
+userRouter.post("/log-in", userController.logInUser);
 
 userRouter.get("/users", userController.getAllUsers);
 

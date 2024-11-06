@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const db = require("../db/queries");
+const passport = require("passport");
 
 const validateUser = [
   body("username")
@@ -41,6 +42,18 @@ const createUser = [
   }),
 ];
 
+const logInUser = asyncHandler(async (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+    req.login(user, { session: false });
+  })(req, res, next);
+});
+
 const getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await db.getAllUsers();
   if (users.length === 0) {
@@ -60,6 +73,7 @@ const getDetailsUser = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   createUser,
+  logInUser,
   getAllUsers,
   getDetailsUser,
 };
