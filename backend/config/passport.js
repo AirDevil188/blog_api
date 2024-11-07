@@ -1,7 +1,12 @@
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const LocalStrategy = require("passport-local").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 const db = require("../db/queries");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const passportLocalStrategy = () => {
   passport.use(
@@ -39,4 +44,22 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+const passportJWTStrategy = () => {
+  const opts = {};
+
+  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+  opts.secretOrKey = process.env.SECRET;
+  passport.use(
+    new JwtStrategy(opts, async (jwt_payload, done) => {
+      try {
+        return done(null, jwt_payload.user);
+      } catch (err) {
+        console.log(err);
+        return done(err);
+      }
+    })
+  );
+};
+
 passportLocalStrategy();
+passportJWTStrategy();
