@@ -50,10 +50,48 @@ async function getUser(id) {
   }
 }
 
+// posts
+
+async function getAllPosts() {
+  try {
+    return prisma.post.findMany({});
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getPost(id) {
+  try {
+    return prisma.post.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function createPost(title, text, user) {
+  try {
+    return prisma.post.create({
+      data: {
+        title: title,
+        text: text,
+        userId: user,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
 module.exports = {
   deserializeUser,
   findUser,
   createUser,
   getAllUsers,
+  getAllPosts,
+  createPost,
+  getPost,
   getUser,
 };
