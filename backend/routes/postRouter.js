@@ -3,8 +3,10 @@ const { Router } = require("express");
 const postRouter = Router();
 const postController = require("../controllers/postController");
 
-postRouter.get("/", postController.getAllPosts);
+postRouter.get("/posts", postController.getAllPosts);
 
-postRouter.post("/", postController.createPost);
+postRouter.get("/posts/:id", postController.getPostDetails);
+
+postRouter.post("/posts/create-post", postController.createPost);
 
 module.exports = postRouter;
