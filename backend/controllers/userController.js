@@ -44,7 +44,7 @@ const createUser = [
 ];
 
 const logInUser = asyncHandler(async (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err) {
       return next(err);
     }
@@ -52,6 +52,7 @@ const logInUser = asyncHandler(async (req, res, next) => {
       return res.status(404).json({ message: "User not found!" });
     }
     req.login(user, { session: false });
+    req.user = user;
     jwt.generateToken(req.user, res);
   })(req, res, next);
 });
