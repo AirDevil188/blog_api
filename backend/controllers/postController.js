@@ -21,6 +21,7 @@ const getPostDetails = asyncHandler(async (req, res, next) => {
 const createPost = asyncHandler(async (req, res, next) => {
   const { title, text } = req.body;
   await db.createPost(title, text, req.user);
+  res.redirect("/posts");
 });
 
 module.exports = {
