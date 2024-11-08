@@ -2,11 +2,16 @@ const { Router } = require("express");
 
 const postRouter = Router();
 const postController = require("../controllers/postController");
+const passport = require("passport");
 
-postRouter.get("/posts", postController.getAllPosts);
+postRouter.get("/", postController.getAllPosts);
 
-postRouter.get("/posts/:id", postController.getPostDetails);
+postRouter.get("/:id", postController.getPostDetails);
 
-postRouter.post("/posts/create-post", postController.createPost);
+postRouter.post(
+  "/create-post",
+  passport.authenticate("jwt", { session: false }),
+  postController.createPost
+);
 
 module.exports = postRouter;
