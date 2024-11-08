@@ -10,8 +10,7 @@ const getAllPosts = asyncHandler(async (req, res, next) => {
 });
 
 const getPostDetails = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const post = await db.getPost(id);
+  const post = await db.getPost(req.params.id);
   if (!post) {
     return res.status(404).json({ message: "Post Not Found" });
   }
