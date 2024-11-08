@@ -44,17 +44,25 @@ const createUser = [
 ];
 
 const logInUser = asyncHandler(async (req, res, next) => {
-  passport.authenticate("local", { session: false }, (err, user, info) => {
-    if (err) {
-      return next(err);
+  passport.authenticate(
+    "local",
+    { session: false },
+    async (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+      req.login(user, { session: false });
+      req.user = user;
+      const token = await jwt.generateToken(req.user);
+      res.json({
+        user: user.id,
+        token,
+      });
     }
-    if (!user) {
-      return res.status(404).json({ message: "User not found!" });
-    }
-    req.login(user, { session: false });
-    req.user = user;
-    jwt.generateToken(req.user, res);
-  })(req, res, next);
+  )(req, res, next);
 });
 
 const getAllUsers = asyncHandler(async (req, res, next) => {
