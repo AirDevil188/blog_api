@@ -6,7 +6,7 @@ const passport = require("passport");
 
 postRouter.get("/", postController.getAllPosts);
 
-postRouter.get("/:id", postController.getPostDetails);
+postRouter.get("/post/:id", postController.getPostDetails);
 
 postRouter.post(
   "/create-post",
