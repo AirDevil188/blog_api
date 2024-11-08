@@ -60,7 +60,7 @@ const logInUser = asyncHandler(async (req, res, next) => {
 const getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await db.getAllUsers();
   if (users.length === 0) {
-    return res.status(404).json({ message: "There are no users!" });
+    return res.status(404).json({ message: "Users not found!" });
   }
   return res.json(users);
 });
@@ -69,7 +69,7 @@ const getDetailsUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const user = await db.getUser(id);
   if (!user) {
-    return res.json({ message: "User Was not found" });
+    return res.json({ message: "User  not found!" });
   }
   return res.json(user);
 });
