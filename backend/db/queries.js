@@ -66,6 +66,27 @@ async function getPost(id) {
       where: {
         id: id,
       },
+      select: {
+        id: false,
+        createdAt: true,
+        updatedAt: true,
+        text: true,
+        title: true,
+        comments: {
+          select: {
+            id: false,
+            createdAt: true,
+            updatedAt: true,
+            user: {
+              select: {
+                id: false,
+                password: false,
+                username: true,
+              },
+            },
+          },
+        },
+      },
     });
   } catch (err) {
     console.log(err);
@@ -85,12 +106,42 @@ async function createPost(title, text, user) {
     console.log(err);
   }
 }
+
+// comments
+
+async function getAllComments(postId) {
+  try {
+    return prisma.comment.findMany({
+      where: {
+        postId: postId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function createComment(text, postId, userId) {
+  try {
+    return prisma.comment.create({
+      data: {
+        text: text,
+        postId: postId,
+        userId: userId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
 module.exports = {
   deserializeUser,
   findUser,
   createUser,
   getAllUsers,
   getAllPosts,
+  getAllComments,
+  createComment,
   createPost,
   getPost,
   getUser,
