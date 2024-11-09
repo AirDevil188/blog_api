@@ -107,6 +107,18 @@ async function createPost(title, text, user) {
   }
 }
 
+async function deletePost(id) {
+  try {
+    return prisma.post.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 // comments
 
 async function getAllComments(postId) {
@@ -143,6 +155,7 @@ module.exports = {
   getAllComments,
   createComment,
   createPost,
+  deletePost,
   getPost,
   getUser,
 };

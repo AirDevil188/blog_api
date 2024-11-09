@@ -23,8 +23,14 @@ const createPost = asyncHandler(async (req, res, next) => {
   res.redirect("/posts");
 });
 
+const deletePost = asyncHandler(async (req, res, next) => {
+  await db.deletePost(req.params.id);
+  res.redirect("/posts");
+});
+
 module.exports = {
   getAllPosts,
   createPost,
+  deletePost,
   getPostDetails,
 };
