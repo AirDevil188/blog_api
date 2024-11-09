@@ -10,4 +10,10 @@ commentRouter.post(
   commentController.createComment
 );
 
+commentRouter.delete(
+  "/delete/comment/:id",
+  passport.authenticate("jwt", { session: false }),
+  commentController.deleteComment
+);
+
 module.exports = commentRouter;

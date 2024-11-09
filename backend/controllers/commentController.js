@@ -7,6 +7,12 @@ const createComment = asyncHandler(async (req, res, next) => {
   return res.redirect(`/posts/post/${req.params.id}`);
 });
 
+const deleteComment = asyncHandler(async (req, res, next) => {
+  await db.deleteComment(req.params.id);
+  return res.redirect(`/posts/post/${req.params.id}`);
+});
+
 module.exports = {
   createComment,
+  deleteComment,
 };
