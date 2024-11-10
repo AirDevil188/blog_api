@@ -23,6 +23,12 @@ const createPost = asyncHandler(async (req, res, next) => {
   res.redirect("/posts");
 });
 
+const updatePost = asyncHandler(async (req, res, next) => {
+  const { title, text } = req.body;
+  await db.updatePost(title, text, req.params.id);
+  res.redirect(`/posts/post/${req.params.id}`);
+});
+
 const deletePost = asyncHandler(async (req, res, next) => {
   await db.deletePost(req.params.id);
   res.redirect("/posts");
@@ -32,5 +38,6 @@ module.exports = {
   getAllPosts,
   createPost,
   deletePost,
+  updatePost,
   getPostDetails,
 };
