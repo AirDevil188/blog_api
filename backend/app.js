@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/posts", postRouter);
-app.use("/posts", commentRouter);
+app.use("/posts/:postId", commentRouter);
 app.use("/", userRouter);
 
 app.listen(process.env.PORT, () =>
