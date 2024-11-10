@@ -77,6 +77,7 @@ async function getPost(id) {
             id: false,
             createdAt: true,
             updatedAt: true,
+            text: true,
             user: {
               select: {
                 id: false,
@@ -147,6 +148,22 @@ async function createComment(text, postId, userId) {
   }
 }
 
+async function editComment(id, text, postId) {
+  try {
+    return prisma.comment.update({
+      where: {
+        id: id,
+        postId: postId,
+      },
+      data: {
+        text: text,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function deleteComment(id) {
   try {
     return prisma.comment.delete({
@@ -166,6 +183,7 @@ module.exports = {
   getAllPosts,
   getAllComments,
   createComment,
+  editComment,
   deleteComment,
   createPost,
   deletePost,
