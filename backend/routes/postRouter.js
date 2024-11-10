@@ -1,6 +1,6 @@
 const { Router } = require("express");
 
-const postRouter = Router();
+const postRouter = Router({ mergeParams: true });
 const postController = require("../controllers/postController");
 const passport = require("passport");
 
