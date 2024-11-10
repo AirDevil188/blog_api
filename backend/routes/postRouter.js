@@ -20,4 +20,10 @@ postRouter.delete(
   postController.deletePost
 );
 
+postRouter.put(
+  "/post/update/:id",
+  passport.authenticate("jwt", { session: false }),
+  postController.updatePost
+);
+
 module.exports = postRouter;
