@@ -12,7 +12,14 @@ const deleteComment = asyncHandler(async (req, res, next) => {
   return res.redirect(`/posts/post/${req.params.id}`);
 });
 
+const updateComment = asyncHandler(async (req, res, next) => {
+  const { text } = req.body;
+  await db.editComment(req.params.id, text, req.params.postId);
+  res.redirect(`/posts/post/${req.params.postId}`);
+});
+
 module.exports = {
   createComment,
   deleteComment,
+  updateComment,
 };
