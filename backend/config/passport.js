@@ -52,7 +52,7 @@ const passportJWTStrategy = () => {
   passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
       try {
-        return done(null, jwt_payload.user);
+        return done(null, { user: jwt_payload.user, role: jwt_payload.role });
       } catch (err) {
         console.log(err);
         return done(err);

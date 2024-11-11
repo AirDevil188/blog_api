@@ -59,6 +59,7 @@ const logInUser = asyncHandler(async (req, res, next) => {
       const token = await jwt.generateToken(req.user);
       res.json({
         user: user.id,
+        role: user.role,
         token,
       });
     }
