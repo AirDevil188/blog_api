@@ -52,14 +52,12 @@ const logInUser = asyncHandler(async (req, res, next) => {
         return next(err);
       }
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(401).json({ message: "User not found!" });
       }
       req.login(user, { session: false });
       req.user = user;
       const token = await jwt.generateToken(req.user);
       res.json({
-        user: user.id,
-        role: user.role,
         token,
       });
     }
