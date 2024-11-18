@@ -1,10 +1,19 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const jwt = require("./config/jwt");
+const cors = require("cors");
 
 dotenv.config();
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET,PUT,POST",
+    optionsSuccessStatus: 204,
+  })
+);
 
 const postRouter = require("./routes/postRouter");
 const userRouter = require("./routes/userRouter");
