@@ -37,8 +37,8 @@ const createUser = [
         console.log(err);
         return next(err);
       }
-      await db.createUser(username, hashedPassword);
-      res.redirect("/");
+      const user = await db.createUser(username, hashedPassword);
+      res.json(user);
     });
   }),
 ];
