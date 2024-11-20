@@ -60,8 +60,8 @@ const SignUp = () => {
           <>
             <section className="error-section">
               <div className="error-container">
-                {errors[0].errors.map((err) => {
-                  return <p>{err.msg}</p>;
+                {errors[0].errors.map((err, index) => {
+                  return <p key={index}>{err.msg}</p>;
                 })}
               </div>
             </section>
