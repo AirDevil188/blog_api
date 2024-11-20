@@ -30,6 +30,13 @@ const createUser = [
     }
 
     const { username, password } = req.body;
+    const user = db.findUser(username);
+    if (user) {
+      return res
+        .status(400)
+        .json([{ errors: [{ msg: "Username already exists!" }] }]);
+    }
+
     bcrypt.hash(password, 10, async (err, hashedPassword) => {
       if (err) {
         console.log(err);
