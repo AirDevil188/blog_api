@@ -30,7 +30,7 @@ const createUser = [
     }
 
     const { username, password } = req.body;
-    const user = db.findUser(username);
+    const user = await db.findUser(username);
     if (user) {
       return res
         .status(400)
