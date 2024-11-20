@@ -26,9 +26,7 @@ const createUser = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      console.log(errors);
-      console.log("error");
-      return res.status(422).json({ message: errors });
+      return res.status(422).json([errors]);
     }
 
     const { username, password } = req.body;
