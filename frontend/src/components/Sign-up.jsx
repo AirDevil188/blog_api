@@ -37,7 +37,7 @@ const SignUp = () => {
         <form action="POST" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username: </label>
-            <input type="text" name="username" id="username" />
+            <input type="text" name="username" id="username" required />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password: </label>
@@ -49,6 +49,7 @@ const SignUp = () => {
               type="password"
               id="confirm_password"
               name="confirm_password"
+              required
             />
           </div>
           <div className="button-container">
