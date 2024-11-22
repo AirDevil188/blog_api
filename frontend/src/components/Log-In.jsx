@@ -1,14 +1,20 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const LogIn = () => {
+  const navigate = useNavigate();
   const { userObject, setUserObject } = useContext(UserContext);
   const [errors, setErrors] = useState(null);
-  console.log(userObject);
+  useEffect(() => {
+    if (userObject) {
+      navigate("/");
+    }
+  });
 
   const handleSubmit = async (e) => {
-    e.preventDefault(e);
+    e.preventDefault();
     const formData = new FormData(e.target);
     try {
       const response = await fetch("http://localhost:3000/log-in", {
@@ -28,12 +34,13 @@ const LogIn = () => {
         const user = {
           user: {
             token: data.token,
+            username: formData.get("username"),
           },
         };
-        console.log(data);
         localStorage.setItem("token", user.user.token);
-        const decodedToken = jwtDecode(localStorage.getItem("token"));
+        jwtDecode(localStorage.getItem("token"));
         setUserObject(user);
+        navigate("/");
       }
       setErrors({ message: data.message });
     } catch (err) {

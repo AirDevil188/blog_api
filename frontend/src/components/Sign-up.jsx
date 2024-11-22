@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const { userObject, setUserObject } = useContext(UserContext);
   const [errors, setErrors] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userObject) {
+      navigate("/");
+    }
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();

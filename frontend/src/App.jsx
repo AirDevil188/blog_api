@@ -1,11 +1,12 @@
 import { createContext, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { validateJWT } from "./helper/validateJWT";
+import NavBar from "./components/Navbar";
 
 export const UserContext = createContext(null);
 
 const App = () => {
-  const [userObject, setUserObject] = useState({ username: "", token: "" });
+  const [userObject, setUserObject] = useState(null);
 
   useEffect(() => {
     const token = validateJWT();
@@ -19,6 +20,7 @@ const App = () => {
   }, []);
   return (
     <>
+      <NavBar />
       <UserContext.Provider value={{ userObject, setUserObject }}>
         <Outlet />
       </UserContext.Provider>
