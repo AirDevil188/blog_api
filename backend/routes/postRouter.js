@@ -8,7 +8,18 @@ const roleCheck = require("../middlewares/roleCheck");
 
 postRouter.get("/", postController.getAllPosts);
 
-postRouter.get("/post/:id", postController.getPostDetails);
+postRouter.get(
+  "/post/:id",
+  passport.authenticate("jwt", { session: false, failWithError: true }),
+  (err, req, res, next) => {
+    if (err) {
+      return res
+        .status(401)
+        .json({ message: "You are not authorized to access this page" });
+    }
+  },
+  postController.getPostDetails
+);
 
 postRouter.post(
   "/create-post",
