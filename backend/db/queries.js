@@ -54,7 +54,21 @@ async function getUser(id) {
 
 async function getAllPosts() {
   try {
-    return prisma.post.findMany({});
+    return prisma.post.findMany({
+      select: {
+        text: true,
+        title: true,
+        createdAt: true,
+        id: true,
+        user: {
+          select: {
+            username: true,
+            id: false,
+            password: false,
+          },
+        },
+      },
+    });
   } catch (err) {
     console.log(err);
   }
