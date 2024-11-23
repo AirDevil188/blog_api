@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const SignUp = () => {
-  const { userObject, setUserObject } = useContext(UserContext);
+  const [userObject, setUserObject] = useOutletContext();
   const [errors, setErrors] = useState(null);
   const navigate = useNavigate();
 

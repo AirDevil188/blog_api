@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../App";
+import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const LogIn = () => {
   const navigate = useNavigate();
-  const { userObject, setUserObject } = useContext(UserContext);
+  const [userObject, setUserObject] = useOutletContext();
+
   const [errors, setErrors] = useState(null);
   useEffect(() => {
     if (userObject) {
@@ -40,6 +40,7 @@ const LogIn = () => {
         localStorage.setItem("token", user.user.token);
         jwtDecode(localStorage.getItem("token"));
         setUserObject(user);
+        console.log(userObject);
         navigate("/");
       }
       setErrors({ message: data.message });

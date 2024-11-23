@@ -3,10 +3,8 @@ import { Outlet } from "react-router-dom";
 import { validateJWT } from "./helper/validateJWT";
 import NavBar from "./components/Navbar";
 
-export const UserContext = createContext(null);
-
 const App = () => {
-  const [userObject, setUserObject] = useState(null);
+  const [userObject, setUserObject] = useState("");
 
   useEffect(() => {
     const token = validateJWT();
@@ -16,14 +14,13 @@ const App = () => {
         username: token.username,
         token: localStorage.getItem("token"),
       });
+      console.log(userObject);
     }
   }, []);
   return (
     <>
-      <NavBar />
-      <UserContext.Provider value={{ userObject, setUserObject }}>
-        <Outlet />
-      </UserContext.Provider>
+      <NavBar user={userObject} />
+      <Outlet context={[userObject, setUserObject]} />
     </>
   );
 };
