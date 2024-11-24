@@ -3,10 +3,12 @@ import { useOutletContext, useParams } from "react-router-dom";
 
 const PostDetails = () => {
   const params = useParams();
-  const [userObject, setUserObject] = useOutletContext();
+  const {
+    userObject: [userObject, setUserObject],
+    errors: [errors, setErrors],
+  } = useOutletContext();
   const [data, setData] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
-  const [errors, setErrors] = useState(null);
 
   const fetchPostDetails = async () => {
     setIsFetching(true);
@@ -30,6 +32,8 @@ const PostDetails = () => {
           setData(data);
         }
         setErrors(data.message);
+        console.log(errors);
+        console.log(userObject);
       } catch (err) {
         console.log(err);
         return err;

@@ -5,6 +5,7 @@ import NavBar from "./components/Navbar";
 
 const App = () => {
   const [userObject, setUserObject] = useState("");
+  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     const token = validateJWT();
@@ -19,8 +20,13 @@ const App = () => {
   }, []);
   return (
     <>
-      <NavBar user={userObject} />
-      <Outlet context={[userObject, setUserObject]} />
+      <NavBar user={userObject} setUserObject={setUserObject} />
+      <Outlet
+        context={{
+          userObject: [userObject, setUserObject],
+          errors: [errors, setErrors],
+        }}
+      />
     </>
   );
 };

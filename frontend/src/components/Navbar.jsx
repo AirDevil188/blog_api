@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
-const NavBar = ({ user }) => {
+const NavBar = ({ user, setUserObject }) => {
   const navigate = useNavigate();
-
   const handleLogOut = () => {
     localStorage.clear();
-    setUserObject(null);
+    setUserObject("");
     navigate("/log-in");
   };
   return (

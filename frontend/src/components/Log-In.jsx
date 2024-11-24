@@ -4,9 +4,10 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 
 const LogIn = () => {
   const navigate = useNavigate();
-  const [userObject, setUserObject] = useOutletContext();
-
-  const [errors, setErrors] = useState(null);
+  const {
+    userObject: [userObject, setUserObject],
+    errors: [errors, setErrors],
+  } = useOutletContext();
   useEffect(() => {
     if (userObject) {
       navigate("/");

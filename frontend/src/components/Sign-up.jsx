@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 const SignUp = () => {
-  const [userObject, setUserObject] = useOutletContext();
-  const [errors, setErrors] = useState(null);
+  const {
+    userObject: [userObject, setUserObject],
+    errors: [errors, setErrors],
+  } = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
