@@ -5,7 +5,7 @@ const commentController = require("../controllers/commentController");
 const commentRouter = Router({ mergeParams: true });
 
 commentRouter.post(
-  "/create/:id",
+  "/create",
   passport.authenticate("jwt", { session: false }),
   (err, req, res, next) => {
     if (err) {

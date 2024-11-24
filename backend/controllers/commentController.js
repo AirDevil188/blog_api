@@ -2,9 +2,10 @@ const asyncHandler = require("express-async-handler");
 const db = require("../db/queries");
 
 const createComment = asyncHandler(async (req, res, next) => {
+  console.log(req.user);
   const { text } = req.body;
-  await db.createComment(text, req.params.id, req.user);
-  return res.redirect(`/posts/post/${req.params.id}`);
+  await db.createComment(text, req.params.postId, req.user.user);
+  return res.redirect(`/posts/post/${req.params.postId}`);
 });
 
 const deleteComment = asyncHandler(async (req, res, next) => {
