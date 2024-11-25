@@ -75,6 +75,31 @@ const PostDetails = () => {
     }
   };
 
+  const handleDelete = async (e) => {
+    setReload(false);
+    try {
+      if (isFetching) {
+        const response = await fetch(
+          `http://localhost:3000/posts/${params.id}/delete/comment/${e.target.id}`,
+          {
+            mode: "cors",
+            method: "DELETE",
+            headers: {
+              Authorization: "Bearer " + userObject.token,
+            },
+          }
+        );
+        if (response.ok) {
+          setReload(true);
+          return;
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  };
+
   useEffect(() => {
     fetchPostDetails();
   }, [isFetching, reload]);
@@ -121,6 +146,19 @@ const PostDetails = () => {
                         </div>
                         <div className="comment-user">
                           <small>{comment.user.username}</small>
+                        </div>
+                        <div className="buttons-container">
+                          {userObject.username === comment.user.username ? (
+                            <>
+                              <button
+                                className="btn-delete"
+                                onClick={handleDelete}
+                                id={comment.id}
+                              >
+                                DELETE
+                              </button>
+                            </>
+                          ) : null}
                         </div>
                       </section>
                     </article>
