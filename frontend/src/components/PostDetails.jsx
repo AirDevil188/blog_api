@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 
 const PostDetails = () => {
@@ -9,6 +9,8 @@ const PostDetails = () => {
   } = useOutletContext();
   const [data, setData] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [input, setInput] = useState("");
 
   const fetchPostDetails = async () => {
     setIsFetching(true);
@@ -29,11 +31,42 @@ const PostDetails = () => {
         const data = await response.json();
 
         if (response.ok) {
-          setData(data);
+          setData(() => ({ ...data }));
         }
         setErrors(data.message);
-        console.log(errors);
-        console.log(userObject);
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    setReload(false);
+    e.preventDefault();
+    if (isFetching) {
+      const formData = new FormData(e.target);
+      try {
+        const response = await fetch(
+          `http://localhost:3000/posts/${params.id}/create`,
+          {
+            mode: "cors",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + userObject.token,
+            },
+            body: JSON.stringify({
+              text: formData.get("comment_text"),
+            }),
+          }
+        );
+        await response.json();
+        if (response.ok) {
+          setReload(true);
+          setInput("");
+          return;
+        }
       } catch (err) {
         console.log(err);
         return err;
@@ -43,7 +76,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     fetchPostDetails();
-  }, [isFetching]);
+  }, [isFetching, reload]);
 
   return (
     <>
@@ -62,6 +95,53 @@ const PostDetails = () => {
           </section>
           <section className="post-text">
             <p>{data.text}</p>
+          </section>
+          <section className="comments-section">
+            <h3>Comments: </h3>
+            {data.comments ? (
+              <>
+                {data.comments.map((comment) => {
+                  return (
+                    <article
+                      className="comment"
+                      id={comment.id}
+                      key={comment.id}
+                    >
+                      <section className="comment-text">
+                        <div className="comment-text">
+                          <p>{comment.text}</p>
+                        </div>
+                      </section>
+                      <section className="comment-details">
+                        <div className="comment-createdAt">
+                          <small>{comment.createdAt}</small>
+                        </div>
+                        <div className="comment-user">
+                          <small>{comment.user.username}</small>
+                        </div>
+                      </section>
+                    </article>
+                  );
+                })}
+              </>
+            ) : null}
+            <section className="create-comment-section">
+              <form method="POST" onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="comment_text"></label>
+                  <input
+                    type="text"
+                    id="comment_text"
+                    name="comment_text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                </div>
+                <div className="button-container">
+                  <button type="submit">Submit</button>
+                </div>
+              </form>
+            </section>
           </section>
         </article>
       ) : null}
