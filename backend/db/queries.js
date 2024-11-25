@@ -88,7 +88,7 @@ async function getPost(id) {
         title: true,
         comments: {
           select: {
-            id: false,
+            id: true,
             createdAt: true,
             updatedAt: true,
             text: true,
