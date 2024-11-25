@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
+import { DateTime } from "luxon";
 
 const PostDetails = () => {
   const params = useParams();
@@ -90,7 +91,7 @@ const PostDetails = () => {
               <small>{data.userId}</small>
             </div>
             <div className="post-createdAt">
-              <small>{data.createdAt}</small>
+              <small>{new DateTime(data.createdAt).toLocaleString()}</small>
             </div>
           </section>
           <section className="post-text">
@@ -114,7 +115,9 @@ const PostDetails = () => {
                       </section>
                       <section className="comment-details">
                         <div className="comment-createdAt">
-                          <small>{comment.createdAt}</small>
+                          <small>
+                            {new DateTime(comment.createdAt).toLocaleString()}
+                          </small>
                         </div>
                         <div className="comment-user">
                           <small>{comment.user.username}</small>
