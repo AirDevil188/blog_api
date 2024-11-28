@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { DateTime } from "luxon";
 
 const PostDetails = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const {
     userObject: [userObject, setUserObject],
     errors: [errors, setErrors],
   } = useOutletContext();
   const [data, setData] = useState(null);
+  const [comments, setComments] = useState(data ? data.comments : []);
+  const [input, setInput] = useState({ newInput: "", editInput: "" });
+  const [edit, setEdit] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
-  const [reload, setReload] = useState(false);
-  const [input, setInput] = useState("");
 
   const fetchPostDetails = async () => {
     setIsFetching(true);
@@ -33,6 +35,7 @@ const PostDetails = () => {
 
         if (response.ok) {
           setData(() => ({ ...data }));
+          setComments(data.comments);
         }
         setErrors(data.message);
       } catch (err) {
@@ -43,7 +46,7 @@ const PostDetails = () => {
   };
 
   const handleSubmit = async (e) => {
-    setReload(false);
+    setIsFetching(true);
     e.preventDefault();
     if (isFetching) {
       const formData = new FormData(e.target);
@@ -62,10 +65,11 @@ const PostDetails = () => {
             }),
           }
         );
-        await response.json();
+
         if (response.ok) {
-          setReload(true);
-          setInput("");
+          const data = await response.json();
+          setIsFetching(false);
+          setInput({ ...input, newInput: "" });
           return;
         }
       } catch (err) {
@@ -76,7 +80,6 @@ const PostDetails = () => {
   };
 
   const handleDelete = async (e) => {
-    setReload(false);
     try {
       if (isFetching) {
         const response = await fetch(
@@ -90,7 +93,55 @@ const PostDetails = () => {
           }
         );
         if (response.ok) {
-          setReload(true);
+          const comment = comments.filter(
+            (comment) => comment.id !== e.target.id
+          );
+
+          setComments(comment);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  };
+
+  const onShow = (e) => {
+    const comment = comments.find((comment) => comment.id === e.target.id);
+    setInput({ ...input, editInput: comment.text });
+    setEdit(e.target.id);
+  };
+
+  const handleEdit = async (e) => {
+    try {
+      if (isFetching) {
+        const formData = new FormData();
+        formData.append("comment_text", input.editInput);
+        const response = await fetch(
+          `http://localhost:3000/posts/${params.id}/update/comment/${e.target.id}`,
+          {
+            mode: "cors",
+            method: "PUT",
+            body: JSON.stringify({
+              text: formData.get("comment_text"),
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + userObject.token,
+            },
+          }
+        );
+        if (response.ok) {
+          const newComments = [...comments];
+          newComments.map((comment) => {
+            if (comment.id === e.target.id) {
+              comment.text = input.editInput;
+            }
+            return comment;
+          });
+          setComments(newComments);
+          setInput({ ...input, editInput: "" });
+          setEdit(null);
           return;
         }
       }
@@ -102,7 +153,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     fetchPostDetails();
-  }, [isFetching, reload]);
+  }, [isFetching]);
 
   return (
     <>
@@ -126,7 +177,7 @@ const PostDetails = () => {
             <h3>Comments: </h3>
             {data.comments ? (
               <>
-                {data.comments.map((comment) => {
+                {Object.values(comments).map((comment) => {
                   return (
                     <article
                       className="comment"
@@ -135,7 +186,23 @@ const PostDetails = () => {
                     >
                       <section className="comment-text">
                         <div className="comment-text">
-                          <p>{comment.text}</p>
+                          {edit === comment.id ? (
+                            <>
+                              <input
+                                id="comment_text"
+                                name="comment_text"
+                                value={input.editInput}
+                                onChange={(e) =>
+                                  setInput({
+                                    ...input,
+                                    editInput: e.target.value,
+                                  })
+                                }
+                              ></input>
+                            </>
+                          ) : (
+                            <p>{comment.text}</p>
+                          )}
                         </div>
                       </section>
                       <section className="comment-details">
@@ -157,6 +224,15 @@ const PostDetails = () => {
                               >
                                 DELETE
                               </button>
+                              <button
+                                className="btn-edit"
+                                onClick={
+                                  edit === comment.id ? handleEdit : onShow
+                                }
+                                id={comment.id}
+                              >
+                                {edit === comment.id ? "SUBMIT" : "EDIT"}
+                              </button>
                             </>
                           ) : null}
                         </div>
@@ -174,8 +250,10 @@ const PostDetails = () => {
                     type="text"
                     id="comment_text"
                     name="comment_text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    value={input.newInput}
+                    onChange={(e) =>
+                      setInput({ ...input, newInput: e.target.value })
+                    }
                   />
                 </div>
                 <div className="button-container">
