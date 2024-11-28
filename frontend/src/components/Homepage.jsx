@@ -3,7 +3,10 @@ import Posts from "./Posts";
 import { useOutletContext } from "react-router-dom";
 
 const Homepage = () => {
-  const { userObject, setUserObject } = useOutletContext();
+  const {
+    userObject: [userObject, setUserObject],
+    errors: [errors, setErrors],
+  } = useOutletContext();
   const [posts, setPosts] = useState(null);
 
   const fetchPOSTS = async () => {
@@ -12,19 +15,19 @@ const Homepage = () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
-    const data = await response.json();
-    setPosts(data);
+
+    if (response.ok) {
+      const data = await response.json();
+      setPosts(data);
+    }
+    setErrors(errors);
   };
 
   useEffect(() => {
     fetchPOSTS();
   }, []);
 
-  return (
-    <>
-      <Posts posts={posts} />
-    </>
-  );
+  return <>{<Posts posts={posts} />}</>;
 };
 
 export default Homepage;
