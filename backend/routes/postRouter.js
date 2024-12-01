@@ -4,7 +4,7 @@ const postRouter = Router({ mergeParams: true });
 const postController = require("../controllers/postController");
 const passport = require("passport");
 
-const roleCheck = require("../middlewares/roleCheck");
+const auth = require("../middlewares/auth");
 
 postRouter.get("/", postController.getAllPosts);
 
@@ -24,21 +24,21 @@ postRouter.get(
 postRouter.post(
   "/create-post",
   passport.authenticate("jwt", { session: false }),
-  roleCheck.roleCheck,
+  auth.roleCheck,
   postController.createPost
 );
 
 postRouter.delete(
   "/post/delete/:id",
   passport.authenticate("jwt", { session: false }),
-  roleCheck.roleCheck,
+  auth.roleCheck,
   postController.deletePost
 );
 
 postRouter.put(
   "/post/update/:id",
   passport.authenticate("jwt", { session: false }),
-  roleCheck.roleCheck,
+  auth.roleCheck,
   postController.updatePost
 );
 

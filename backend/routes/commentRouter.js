@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const passport = require("passport");
 const commentController = require("../controllers/commentController");
+const auth = require("../middlewares/auth");
 
 const commentRouter = Router({ mergeParams: true });
 
@@ -27,6 +28,7 @@ commentRouter.delete(
         .json({ message: "You are not authorized to access this page" });
     }
   },
+  auth.roleCheck,
   commentController.deleteComment
 );
 
@@ -40,6 +42,7 @@ commentRouter.put(
         .json({ message: "You are not authorized to access this page" });
     }
   },
+  auth.roleCheck,
   commentController.updateComment
 );
 
