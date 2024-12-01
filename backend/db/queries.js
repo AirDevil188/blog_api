@@ -152,6 +152,19 @@ async function updatePost(title, text, id) {
 
 // comments
 
+async function getComment(commentId) {
+  try {
+    return prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
 async function getAllComments(postId) {
   try {
     return prisma.comment.findMany({
@@ -211,6 +224,7 @@ module.exports = {
   createUser,
   getAllUsers,
   getAllPosts,
+  getComment,
   getAllComments,
   createComment,
   editComment,
