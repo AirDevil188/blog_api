@@ -1,9 +1,10 @@
 import styles from "./Navbar.module.css";
 import { RxHamburgerMenu } from "react-icons/rx";
 import useClickOutside from "../hooks/useClickOutside";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = ({ user, setUserObject, hamburger, setHamburger }) => {
+  const navigate = useNavigate();
   const handleLogOut = () => {
     localStorage.clear();
     setUserObject("");
