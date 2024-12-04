@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import styles from "../components/Log-In.module.css";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -52,14 +53,14 @@ const LogIn = () => {
   };
   return (
     <>
-      <section className="log-in-section">
-        <div className="log-in-container">
+      <main className={styles.mainContainer}>
+        <section className={styles.logInSection}>
           <form method="post" onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="username">Username: </label>
               <input type="text" name="username" id="username" required />
             </div>
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="password">Password: </label>
               <input type="password" name="password" id="password" required />
             </div>
@@ -77,8 +78,8 @@ const LogIn = () => {
               </section>
             </>
           ) : null}
-        </div>
-      </section>
+        </section>
+      </main>
     </>
   );
 };

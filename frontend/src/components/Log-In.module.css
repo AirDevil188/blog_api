@@ -1,0 +1,30 @@
+:root {
+  --border-color: #3e362e;
+}
+
+.mainContainer {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.logInSection {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  border: 2px solid var(--border-color);
+  padding: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.logInSection > form {
+  display: flex;
+  gap: 10px;
+  flex-flow: column wrap;
+  align-items: center;
+}
