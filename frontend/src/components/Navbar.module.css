@@ -35,10 +35,6 @@ li {
   align-items: center;
 }
 
-.menuClose {
-  display: none;
-}
-
 @media (min-width: 800px) {
   .hamburgerBtn {
     display: none;
