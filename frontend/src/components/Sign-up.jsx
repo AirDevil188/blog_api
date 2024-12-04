@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import styles from "../components/Sign-up.module.css";
 
 const SignUp = () => {
   const {
@@ -41,18 +42,18 @@ const SignUp = () => {
     }
   };
   return (
-    <section className="sign-up-section">
-      <div className="sign-up-container">
+    <main className={styles.mainContainer}>
+      <section className={styles.signUpSection}>
         <form action="POST" onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="username">Username: </label>
             <input type="text" name="username" id="username" required />
           </div>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="password">Password: </label>
             <input type="password" name="password" id="password" required />
           </div>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="confirm_password">Confirm Password: </label>
             <input
               type="password"
@@ -76,8 +77,8 @@ const SignUp = () => {
             </section>
           </>
         ) : null}
-      </div>
-    </section>
+      </section>
+    </main>
   );
 };
 
