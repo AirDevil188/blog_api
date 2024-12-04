@@ -1,10 +1,26 @@
+:root {
+  ---header-bg-color: #3e362e;
+}
+
 header {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
+  padding: 1rem;
+  background-color: var(---header-bg-color);
+  color: #fff;
 }
 
 menu {
   display: none;
+  gap: 10px;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
 }
 
 li {
@@ -26,6 +42,7 @@ li {
 
 .hamburgerBtn {
   border: none;
+  background: none;
   text-align: left;
 }
 
