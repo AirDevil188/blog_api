@@ -2,31 +2,38 @@ import { useState, useEffect } from "react";
 import { DateTime } from "luxon";
 import { FaUser, FaCalendarAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import styles from "../components/Posts.module.css";
 
 const Posts = ({ posts }) => {
   return (
-    <main>
-      <section className="posts-section">
+    <main className={styles.mainContainer}>
+      <section className={styles.titleSection}>
+        <h3>Posts: </h3>
+      </section>
+      <section className={styles.postsSection}>
         {posts
           ? posts.map((post) => {
               return (
-                <article className="post" id={post.id} key={post.id}>
+                <a
+                  className={styles.post}
+                  id={post.id}
+                  key={post.id}
+                  href={`/posts/post/${post.id}`}
+                >
                   <section className="post-title-section">
                     <h3>{post.title}</h3>
                   </section>
-                  <section className="post-text-section">
-                    <p>{post.text}</p>
-                  </section>
+
                   <section className="post-details-section">
-                    <FaUser />
-                    <small>User: {post.user.username}</small>
+                    <div>
+                      <small>User: {post.user.username} </small>
+                    </div>
                     <small>
-                      <FaCalendarAlt />
                       Created At:
                       {new DateTime(post.createdAt).toLocaleString()}
                     </small>
                   </section>
-                </article>
+                </a>
               );
             })
           : null}

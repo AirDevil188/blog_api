@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { DateTime } from "luxon";
+import styles from "../components/PostDetails.module.css";
 
 const PostDetails = () => {
   const navigate = useNavigate();
@@ -157,120 +158,125 @@ const PostDetails = () => {
 
   return (
     <>
-      {data ? (
-        <article className="post-details">
-          <section className="post-details-title">
-            <h3>{data.title}</h3>
-          </section>
-          <section className="post-details">
-            <div className="post-user">
-              <small>{data.userId}</small>
-            </div>
-            <div className="post-createdAt">
-              <small>{new DateTime(data.createdAt).toLocaleString()}</small>
-            </div>
-          </section>
-          <section className="post-text">
-            <p>{data.text}</p>
-          </section>
-          <section className="comments-section">
-            <h3>Comments: </h3>
-            {data.comments ? (
-              <>
-                {Object.values(comments).map((comment) => {
-                  return (
-                    <article
-                      className="comment"
-                      id={comment.id}
-                      key={comment.id}
-                    >
-                      <section className="comment-text">
-                        <div className="comment-text">
-                          {edit === comment.id ? (
-                            <>
-                              <input
-                                id="comment_text"
-                                name="comment_text"
-                                value={input.editInput}
-                                onChange={(e) =>
-                                  setInput({
-                                    ...input,
-                                    editInput: e.target.value,
-                                  })
-                                }
-                              ></input>
-                            </>
-                          ) : (
-                            <p>{comment.text}</p>
-                          )}
-                        </div>
-                      </section>
-                      <section className="comment-details">
-                        <div className="comment-createdAt">
-                          <small>
-                            {new DateTime(comment.createdAt).toLocaleString()}
-                          </small>
-                        </div>
-                        <div className="comment-user">
-                          <small>{comment.user.username}</small>
-                        </div>
-                        <div className="buttons-container">
-                          {userObject.username === comment.user.username ? (
-                            <>
-                              <button
-                                className="btn-delete"
-                                onClick={handleDelete}
-                                id={comment.id}
-                              >
-                                DELETE
-                              </button>
-                              <button
-                                className="btn-edit"
-                                onClick={
-                                  edit === comment.id ? handleEdit : onShow
-                                }
-                                id={comment.id}
-                              >
-                                {edit === comment.id ? "SUBMIT" : "EDIT"}
-                              </button>
-                            </>
-                          ) : null}
-                        </div>
-                      </section>
-                    </article>
-                  );
-                })}
-              </>
-            ) : null}
-            <section className="create-comment-section">
-              <form method="POST" onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="comment_text"></label>
-                  <input
-                    type="text"
-                    id="comment_text"
-                    name="comment_text"
-                    value={input.newInput}
-                    onChange={(e) =>
-                      setInput({ ...input, newInput: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="button-container">
-                  <button type="submit">Submit</button>
-                </div>
-              </form>
+      <main className={styles.mainContainer}>
+        {data ? (
+          <article className={styles.postDetails}>
+            <section className="post-details-title">
+              <h3>{data.title}</h3>
             </section>
-          </section>
-        </article>
-      ) : null}
-      {errors ? (
-        <>
-          <section className="errors-section">
-            <p>{errors}</p>
-          </section>
-        </>
-      ) : null}
+            <section className="post-details">
+              <div className="post-user">
+                <small>{data.userId}</small>
+              </div>
+              <div className="post-createdAt">
+                <small>{new DateTime(data.createdAt).toLocaleString()}</small>
+              </div>
+            </section>
+            <section className="post-text">
+              <p>{data.text}</p>
+            </section>
+            <section className="comments-section">
+              <h3>Comments: </h3>
+              {data.comments ? (
+                <>
+                  {Object.values(comments).map((comment) => {
+                    return (
+                      <article
+                        className={styles.comment}
+                        id={comment.id}
+                        key={comment.id}
+                      >
+                        <section className="comment-text">
+                          <div className="comment-text">
+                            {edit === comment.id ? (
+                              <>
+                                <input
+                                  id="comment_text"
+                                  name="comment_text"
+                                  value={input.editInput}
+                                  onChange={(e) =>
+                                    setInput({
+                                      ...input,
+                                      editInput: e.target.value,
+                                    })
+                                  }
+                                ></input>
+                              </>
+                            ) : (
+                              <p>{comment.text}</p>
+                            )}
+                          </div>
+                        </section>
+                        <section className="comment-details">
+                          <div className="comment-createdAt">
+                            <small>
+                              {new DateTime(comment.createdAt).toLocaleString()}
+                            </small>
+                          </div>
+                          <div className="comment-user">
+                            <small>User: {comment.user.username}</small>
+                          </div>
+                          <div className={styles.buttonsContainer}>
+                            {userObject.username === comment.user.username ? (
+                              <>
+                                <button
+                                  className="btn-delete"
+                                  onClick={handleDelete}
+                                  id={comment.id}
+                                >
+                                  DELETE
+                                </button>
+                                <button
+                                  className="btn-edit"
+                                  onClick={
+                                    edit === comment.id ? handleEdit : onShow
+                                  }
+                                  id={comment.id}
+                                >
+                                  {edit === comment.id ? "SUBMIT" : "EDIT"}
+                                </button>
+                              </>
+                            ) : null}
+                          </div>
+                        </section>
+                      </article>
+                    );
+                  })}
+                </>
+              ) : null}
+              <section className="create-comment-section">
+                <section className={styles.postCommentTitle}>
+                  <h3>Post Comment: </h3>
+                </section>
+                <form method="POST" onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="comment_text"></label>
+                    <input
+                      type="text"
+                      id="comment_text"
+                      name="comment_text"
+                      value={input.newInput}
+                      onChange={(e) =>
+                        setInput({ ...input, newInput: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="button-container">
+                    <button type="submit">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </section>
+          </article>
+        ) : null}
+        {errors ? (
+          <>
+            <section className="errors-section">
+              <p>{errors}</p>
+            </section>
+          </>
+        ) : null}
+      </main>
     </>
   );
 };

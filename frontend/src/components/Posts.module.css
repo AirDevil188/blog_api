@@ -1,0 +1,35 @@
+:root {
+  --border-color: #3e362e;
+  --hover-link-color: #383838;
+}
+
+.mainContainer {
+  padding: 1rem;
+}
+
+.postsSection {
+  display: flex;
+  width: 100%;
+  flex-flow: column wrap;
+  gap: 20px;
+  padding: 2rem;
+  align-items: flex-start;
+}
+
+.titleSection {
+  align-self: flex-start;
+  padding-left: 2rem;
+}
+
+.post {
+  display: flex;
+  border: 2px solid var(--border-color);
+  width: 100%;
+  padding: 1rem;
+  flex-flow: column wrap;
+  color: #000;
+}
+
+.post:hover {
+  color: var(--hover-link-color);
+}
