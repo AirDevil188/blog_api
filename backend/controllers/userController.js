@@ -69,6 +69,27 @@ const logInUser = asyncHandler(async (req, res, next) => {
   )(req, res, next);
 });
 
+const logInAdmin = asyncHandler(async (req, res, next) => {
+  passport.authenticate(
+    "local",
+    { session: false },
+    async (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user || user.role !== "admin") {
+        return res.status(401).json({ message: "User not found!" });
+      }
+      req.login(user, { session: false });
+      req.user = user;
+      const token = await jwt.generateToken(req.user);
+      res.json({
+        token,
+      });
+    }
+  )(req, res, next);
+});
+
 const getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await db.getAllUsers();
   if (users.length === 0) {
@@ -89,6 +110,7 @@ const getDetailsUser = asyncHandler(async (req, res, next) => {
 module.exports = {
   createUser,
   logInUser,
+  logInAdmin,
   getAllUsers,
   getDetailsUser,
 };
