@@ -1,0 +1,42 @@
+:root {
+  ---btn-bg-color: #3e362e;
+}
+
+/* GENERAL RULES */
+
+/* CSS RESET */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+#root,
+body {
+  min-height: 100vh;
+}
+
+main {
+  height: 100vh;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+footer {
+  background-color: var(---btn-bg-color);
+  padding: 1rem;
+  color: #fff;
+}
