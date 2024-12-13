@@ -19,19 +19,19 @@ const getPostDetails = asyncHandler(async (req, res, next) => {
 
 const createPost = asyncHandler(async (req, res, next) => {
   const { title, text } = req.body;
-  await db.createPost(title, text, req.user.user);
-  res.redirect("/posts");
+  const post = await db.createPost(title, text, req.user.user);
+  return res.json(post);
 });
 
 const updatePost = asyncHandler(async (req, res, next) => {
   const { title, text } = req.body;
-  await db.updatePost(title, text, req.params.id);
-  res.redirect(`/posts/post/${req.params.id}`);
+  const post = await db.updatePost(title, text, req.params.id);
+  return res.json(post);
 });
 
 const deletePost = asyncHandler(async (req, res, next) => {
-  await db.deletePost(req.params.id);
-  res.redirect("/posts");
+  const post = await db.deletePost(req.params.id);
+  return res.json(post);
 });
 
 module.exports = {
