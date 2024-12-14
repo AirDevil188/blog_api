@@ -31,10 +31,12 @@ const NewPost = () => {
               },
             }
           );
+          const data = await response.json();
           if (response.ok) {
-            const data = await response.json();
             setEdit(data);
+            return;
           }
+          setErrors(data);
         }
       } else return;
     };
@@ -96,7 +98,6 @@ const NewPost = () => {
   return (
     <>
       <section className={styles.newPostSection}>
-        <h3>{edit ? "Edit Post" : "Create Post"}</h3>
         <NewPostCard
           errors={errors}
           handleSubmit={edit ? handleEdit : handleSubmit}
