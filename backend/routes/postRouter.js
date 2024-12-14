@@ -35,6 +35,13 @@ postRouter.delete(
   postController.deletePost
 );
 
+postRouter.get(
+  "/post/update/:id",
+  passport.authenticate("jwt", { session: false }),
+  auth.roleCheck,
+  postController.getUpdatePost
+);
+
 postRouter.put(
   "/post/update/:id",
   passport.authenticate("jwt", { session: false }),

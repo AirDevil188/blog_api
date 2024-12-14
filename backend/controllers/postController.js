@@ -23,6 +23,12 @@ const createPost = asyncHandler(async (req, res, next) => {
   return res.json(post);
 });
 
+const getUpdatePost = asyncHandler(async (req, res, next) => {
+  const post = await db.getPost(req.params.id);
+  console.log(post);
+  return res.json(post);
+});
+
 const updatePost = asyncHandler(async (req, res, next) => {
   const { title, text } = req.body;
   const post = await db.updatePost(title, text, req.params.id);
@@ -38,6 +44,7 @@ module.exports = {
   getAllPosts,
   createPost,
   deletePost,
+  getUpdatePost,
   updatePost,
   getPostDetails,
 };
