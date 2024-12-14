@@ -84,7 +84,7 @@ const Posts = () => {
                       </small>
                     </section>
                     <section className="post-buttons-section">
-                      <a href={`post/update/${post.id}`}>
+                      <a href={`posts/post/update/${post.id}`}>
                         <Button
                           text={"EDIT"}
                           type={"button"}
