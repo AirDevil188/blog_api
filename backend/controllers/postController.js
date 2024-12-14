@@ -25,7 +25,9 @@ const createPost = asyncHandler(async (req, res, next) => {
 
 const getUpdatePost = asyncHandler(async (req, res, next) => {
   const post = await db.getPost(req.params.id);
-  console.log(post);
+  if (!post) {
+    return res.status(404).json({ message: "Post Not Found" });
+  }
   return res.json(post);
 });
 
