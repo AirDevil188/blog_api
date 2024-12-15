@@ -19,7 +19,7 @@ const NewPost = () => {
     const fetchPost = async () => {
       setIsFetching(true);
       if (isFetching) {
-        if (params) {
+        if (Object.hasOwn(params, "id")) {
           const response = await fetch(
             `http://localhost:3000/posts/post/update/${params.id}`,
             {
