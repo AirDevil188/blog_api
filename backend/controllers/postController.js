@@ -4,7 +4,7 @@ const db = require("../db/queries");
 const getAllPosts = asyncHandler(async (req, res, next) => {
   const posts = await db.getAllPosts();
   if (posts.length === 0) {
-    return res.status(404).json({ message: "There are no posts!" });
+    return res.json(null);
   }
   return res.json(posts);
 });
@@ -12,7 +12,7 @@ const getAllPosts = asyncHandler(async (req, res, next) => {
 const getPostDetails = asyncHandler(async (req, res, next) => {
   const post = await db.getPost(req.params.id);
   if (!post) {
-    return res.status(404).json({ message: "Post Not Found" });
+    return res.json(null);
   }
   return res.json(post);
 });
@@ -26,7 +26,7 @@ const createPost = asyncHandler(async (req, res, next) => {
 const getUpdatePost = asyncHandler(async (req, res, next) => {
   const post = await db.getPost(req.params.id);
   if (!post) {
-    return res.status(404).json({ message: "Post Not Found" });
+    return res.json(null);
   }
   return res.json(post);
 });
