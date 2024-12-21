@@ -1,18 +1,17 @@
-import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { DateTime } from "luxon";
-import { FaUser, FaCalendarAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import styles from "../components/Posts.module.css";
 
 const Posts = ({ posts }) => {
   return (
-    <main className={styles.mainContainer}>
-      <section className={styles.titleSection}>
-        <h3>Posts: </h3>
-      </section>
-      <section className={styles.postsSection}>
-        {posts
-          ? posts.map((post) => {
+    <>
+      <main className={styles.mainContainer}>
+        <section className={styles.titleSection}>
+          <h3>Posts: </h3>
+        </section>
+        <section className={styles.postsSection}>
+          {posts ? (
+            posts.map((post) => {
               return (
                 <a
                   className={styles.post}
@@ -36,10 +35,23 @@ const Posts = ({ posts }) => {
                 </a>
               );
             })
-          : null}
-      </section>
-    </main>
+          ) : (
+            <>
+              <>
+                <section className="errors-section">
+                  <p>There are no posts!</p>
+                </section>
+              </>
+            </>
+          )}
+        </section>
+      </main>
+    </>
   );
+};
+
+Posts.propTypes = {
+  posts: PropTypes.array,
 };
 
 export default Posts;
