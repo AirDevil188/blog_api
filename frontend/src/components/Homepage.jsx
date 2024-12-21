@@ -1,33 +1,18 @@
-import { useEffect, useState } from "react";
 import Posts from "./Posts";
-import { useOutletContext } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const Homepage = () => {
-  const {
-    userObject: [userObject, setUserObject],
-    errors: [errors, setErrors],
-  } = useOutletContext();
-  const [posts, setPosts] = useState(null);
+  const postsLoader = useLoaderData();
+  return (
+    <>
+      <Posts posts={postsLoader}></Posts>
+    </>
+  );
+};
 
-  const fetchPOSTS = async () => {
-    const response = await fetch("http://localhost:3000/posts", {
-      mode: "cors",
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      setPosts(data);
-    }
-    setErrors(errors);
-  };
-
-  useEffect(() => {
-    fetchPOSTS();
-  }, []);
-
-  return <>{<Posts posts={posts} />}</>;
+Homepage.propTypes = {
+  postsLoader: PropTypes.object,
 };
 
 export default Homepage;
