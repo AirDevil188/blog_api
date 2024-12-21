@@ -1,160 +1,37 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import {
+  redirect,
+  useFetcher,
+  useLoaderData,
+  useOutletContext,
+} from "react-router-dom";
 import { DateTime } from "luxon";
 import styles from "../components/PostDetails.module.css";
+import Button from "./Button";
+import { handleFetch } from "../utils/handleFetch";
+import FormModal from "./FormModal";
 
 const PostDetails = () => {
-  const navigate = useNavigate();
-  const params = useParams();
+  const fetcher = useFetcher();
   const {
-    userObject: [userObject, setUserObject],
-    errors: [errors, setErrors],
+    userObject: [userObject],
   } = useOutletContext();
-  const [data, setData] = useState(null);
-  const [comments, setComments] = useState(data ? data.comments : []);
+  const data = useLoaderData();
   const [input, setInput] = useState({ newInput: "", editInput: "" });
   const [edit, setEdit] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
-
-  const fetchPostDetails = async () => {
-    setIsFetching(true);
-    if (isFetching) {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/posts/post/${params.id}`,
-          {
-            mode: "cors",
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + userObject.token,
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setData(() => ({ ...data }));
-          setComments(data.comments);
-        }
-        setErrors(data.message);
-      } catch (err) {
-        console.log(err);
-        return err;
-      }
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    setIsFetching(true);
-    e.preventDefault();
-    if (isFetching) {
-      const formData = new FormData(e.target);
-      try {
-        const response = await fetch(
-          `http://localhost:3000/posts/${params.id}/create`,
-          {
-            mode: "cors",
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + userObject.token,
-            },
-            body: JSON.stringify({
-              text: formData.get("comment_text"),
-            }),
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setIsFetching(false);
-          setInput({ ...input, newInput: "" });
-          return;
-        }
-      } catch (err) {
-        console.log(err);
-        return err;
-      }
-    }
-  };
-
-  const handleDelete = async (e) => {
-    try {
-      if (isFetching) {
-        const response = await fetch(
-          `http://localhost:3000/posts/${params.id}/delete/comment/${e.target.id}`,
-          {
-            mode: "cors",
-            method: "DELETE",
-            headers: {
-              Authorization: "Bearer " + userObject.token,
-            },
-          }
-        );
-        if (response.ok) {
-          const comment = comments.filter(
-            (comment) => comment.id !== e.target.id
-          );
-
-          setComments(comment);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      return err;
-    }
-  };
+  const [deleteBtn, setDeleteBtn] = useState(null);
 
   const onShow = (e) => {
-    const comment = comments.find((comment) => comment.id === e.target.id);
+    const comment = data.comments.find((comment) => comment.id === e.target.id);
     setInput({ ...input, editInput: comment.text });
     setEdit(e.target.id);
   };
 
-  const handleEdit = async (e) => {
-    try {
-      if (isFetching) {
-        const formData = new FormData();
-        formData.append("comment_text", input.editInput);
-        const response = await fetch(
-          `http://localhost:3000/posts/${params.id}/update/comment/${e.target.id}`,
-          {
-            mode: "cors",
-            method: "PUT",
-            body: JSON.stringify({
-              text: formData.get("comment_text"),
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + userObject.token,
-            },
-          }
-        );
-        if (response.ok) {
-          const newComments = [...comments];
-          newComments.map((comment) => {
-            if (comment.id === e.target.id) {
-              comment.text = input.editInput;
-            }
-            return comment;
-          });
-          setComments(newComments);
-          setInput({ ...input, editInput: "" });
-          setEdit(null);
-          return;
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      return err;
-    }
-  };
-
   useEffect(() => {
-    fetchPostDetails();
-  }, [isFetching]);
+    if (fetcher.state === "idle") {
+      setInput({ ...input, newInput: "" });
+    }
+  }, [fetcher.state]);
 
   return (
     <>
@@ -179,7 +56,7 @@ const PostDetails = () => {
               <h3>Comments: </h3>
               {data.comments ? (
                 <>
-                  {Object.values(comments).map((comment) => {
+                  {Object.values(data.comments).map((comment) => {
                     return (
                       <article
                         className={styles.comment}
@@ -190,22 +67,66 @@ const PostDetails = () => {
                           <div className="comment-text">
                             {edit === comment.id ? (
                               <>
-                                <input
-                                  id="comment_text"
-                                  name="comment_text"
-                                  value={input.editInput}
-                                  onChange={(e) =>
-                                    setInput({
-                                      ...input,
-                                      editInput: e.target.value,
-                                    })
-                                  }
-                                ></input>
+                                <>
+                                  <fetcher.Form
+                                    method="POST"
+                                    onSubmit={() => setEdit(null)}
+                                  >
+                                    <input
+                                      type="hidden"
+                                      name="id"
+                                      value={comment.id}
+                                    />
+                                    <input
+                                      id="comment_text"
+                                      name="comment_text"
+                                      value={input.editInput}
+                                      onChange={(e) =>
+                                        setInput({
+                                          ...input,
+                                          editInput: e.target.value,
+                                        })
+                                      }
+                                      required={true}
+                                    ></input>
+                                    <div className="buttons-container">
+                                      <Button
+                                        text="Submit"
+                                        type="submit"
+                                        name={"intent"}
+                                        value={"edit"}
+                                        id={comment.id}
+                                      ></Button>
+                                    </div>
+                                  </fetcher.Form>
+                                </>
                               </>
                             ) : (
                               <p>{comment.text}</p>
                             )}
                           </div>
+                          {userObject.username === comment.user.username ? (
+                            <>
+                              <div className="buttons-container">
+                                {!edit ? (
+                                  <>
+                                    <Button
+                                      text={"EDIT"}
+                                      type="button"
+                                      id={comment.id}
+                                      onClick={onShow}
+                                    ></Button>
+                                    <Button
+                                      type="button"
+                                      text="DELETE"
+                                      id={comment.id}
+                                      onClick={(e) => setDeleteBtn(e.target.id)}
+                                    ></Button>
+                                  </>
+                                ) : null}
+                              </div>
+                            </>
+                          ) : null}
                         </section>
                         <section className="comment-details">
                           <div className="comment-createdAt">
@@ -215,28 +136,6 @@ const PostDetails = () => {
                           </div>
                           <div className="comment-user">
                             <small>User: {comment.user.username}</small>
-                          </div>
-                          <div className={styles.buttonsContainer}>
-                            {userObject.username === comment.user.username ? (
-                              <>
-                                <button
-                                  className="btn-delete"
-                                  onClick={handleDelete}
-                                  id={comment.id}
-                                >
-                                  DELETE
-                                </button>
-                                <button
-                                  className="btn-edit"
-                                  onClick={
-                                    edit === comment.id ? handleEdit : onShow
-                                  }
-                                  id={comment.id}
-                                >
-                                  {edit === comment.id ? "SUBMIT" : "EDIT"}
-                                </button>
-                              </>
-                            ) : null}
                           </div>
                         </section>
                       </article>
@@ -248,7 +147,7 @@ const PostDetails = () => {
                 <section className={styles.postCommentTitle}>
                   <h3>Post Comment: </h3>
                 </section>
-                <form method="POST" onSubmit={handleSubmit}>
+                <fetcher.Form method="POST">
                   <div className="form-group">
                     <label htmlFor="comment_text"></label>
                     <input
@@ -259,26 +158,65 @@ const PostDetails = () => {
                       onChange={(e) =>
                         setInput({ ...input, newInput: e.target.value })
                       }
+                      required={true}
                     />
                   </div>
-                  <div className="button-container">
-                    <button type="submit">Submit</button>
-                  </div>
-                </form>
+                  <Button
+                    text="Submit"
+                    type="submit"
+                    name={"intent"}
+                    value={"submit"}
+                  />
+                </fetcher.Form>
               </section>
             </section>
+            {deleteBtn ? (
+              <>
+                <FormModal commentId={deleteBtn} />
+              </>
+            ) : null}
           </article>
-        ) : null}
-        {errors ? (
+        ) : (
           <>
             <section className="errors-section">
-              <p>{errors}</p>
+              <p>Post is not found!</p>
             </section>
           </>
-        ) : null}
+        )}
       </main>
     </>
   );
+};
+
+export const handleSubmit = async ({ request, params }) => {
+  const data = await request.formData();
+  const formData = Object.fromEntries(data);
+  const button = data.get("intent");
+  const { id } = params;
+  const submission = {
+    text: data.get("comment_text"),
+  };
+
+  switch (button) {
+    case "submit":
+      await handleFetch(`/posts/${id}/create`, submission, "POST");
+      break;
+    case "edit":
+      await handleFetch(
+        `/posts/${id}/update/comment/${formData.id}`,
+        submission,
+        "PUT"
+      );
+      break;
+    case "delete":
+      await handleFetch(
+        `/posts/${id}/delete/comment/${formData.id}`,
+        undefined,
+        "DELETE"
+      );
+      break;
+  }
+  return redirect(`/posts/post/${id}`);
 };
 
 export default PostDetails;
