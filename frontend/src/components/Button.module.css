@@ -1,0 +1,8 @@
+button {
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  background-color: var(---btn-bg-color);
+  color: #fff;
+  border: none;
+}
