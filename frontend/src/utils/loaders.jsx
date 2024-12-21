@@ -1,17 +1,41 @@
 import { handleFetch } from "./handleFetch";
 
 export const getPosts = async () => {
-  const resp = await handleFetch("/posts", undefined, "get");
-  return await resp.json();
+  const res = await handleFetch("/posts", undefined, "get");
+
+  if (res.ok) {
+    return await res.json();
+  }
+
+  if (res.status === 404) {
+    throw new Error("Posts Not Found!");
+  }
 };
 
 export const getComments = async () => {
-  const resp = await handleFetch("/comments", undefined, "get");
-  return resp.json();
+  const res = await handleFetch("/comments", undefined, "get");
+
+  if (res.ok) {
+    return res.json();
+  }
+
+  if (res.status === 404) {
+    throw new Error("Comments not Found!");
+  }
 };
 
 export const getPostAndComments = async ({ params }) => {
   const { id } = params;
-  const resp = await handleFetch(`/posts/post/${id}`);
-  return await resp.json();
+  const res = await handleFetch(`/posts/post/${id}`);
+  if (res.ok) {
+    return await res.json();
+  }
+
+  if (res.status === 404) {
+    throw new Error("Post Not Found!");
+  }
+
+  if (res.status === 401) {
+    throw new Error("You are not authorized to access this page!");
+  }
 };

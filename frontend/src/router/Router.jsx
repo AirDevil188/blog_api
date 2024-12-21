@@ -5,6 +5,7 @@ import LogIn from "../components/Log-In";
 import SignUp from "../components/Sign-up";
 import PostDetails, { handleSubmit } from "../components/PostDetails";
 import { getPostAndComments, getPosts } from "../utils/loaders";
+import ErrorElement from "../components/ErrorElement";
 
 const Router = () => {
   const router = createBrowserRouter(
@@ -12,6 +13,7 @@ const Router = () => {
       {
         element: <App />,
         path: "/",
+        errorElement: <ErrorElement />,
         children: [
           {
             path: "/log-in",
