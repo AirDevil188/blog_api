@@ -13,10 +13,11 @@ import FormModal from "./FormModal";
 
 const PostDetails = () => {
   const fetcher = useFetcher();
+  const data = useLoaderData();
   const {
     userObject: [userObject],
   } = useOutletContext();
-  const data = useLoaderData();
+
   const [input, setInput] = useState({ newInput: "", editInput: "" });
   const [edit, setEdit] = useState(null);
   const [deleteBtn, setDeleteBtn] = useState(null);
@@ -176,13 +177,7 @@ const PostDetails = () => {
               </>
             ) : null}
           </article>
-        ) : (
-          <>
-            <section className="errors-section">
-              <p>Post is not found!</p>
-            </section>
-          </>
-        )}
+        ) : null}
       </main>
     </>
   );
