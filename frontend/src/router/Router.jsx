@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "../App";
 import Homepage from "../components/Homepage";
-import LogIn from "../components/Log-In";
+import LogIn, { handleLogIn } from "../components/Log-In";
 import SignUp from "../components/Sign-up";
 import PostDetails, { handleSubmit } from "../components/PostDetails";
 import { getPostAndComments, getPosts } from "../utils/loaders";
@@ -18,6 +18,7 @@ const Router = () => {
           {
             path: "/log-in",
             element: <LogIn />,
+            action: handleLogIn,
           },
           {
             path: "/",
