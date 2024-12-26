@@ -1,10 +1,5 @@
 import { useEffect } from "react";
-import {
-  redirect,
-  useFetcher,
-  useNavigate,
-  useOutletContext,
-} from "react-router-dom";
+import { useFetcher, useNavigate, useOutletContext } from "react-router-dom";
 import styles from "../components/Log-In.module.css";
 import { handleFetch } from "../utils/handleFetch";
 
@@ -13,21 +8,26 @@ const LogIn = () => {
   const fetcher = useFetcher();
 
   const {
-    userObject: [userObject],
+    userObject: [userObject, setUserObject],
     errors: [errors, setErrors],
   } = useOutletContext();
 
   useEffect(() => {
-    if (userObject) {
+    if (userObject.token) {
       navigate("/");
     }
   }, [userObject.token]);
 
   useEffect(() => {
-    if (fetcher.data) {
-      setErrors(fetcher.data);
+    if (!localStorage.getItem("token")) setErrors(fetcher.data);
+    else {
+      setUserObject({
+        ...userObject,
+        username: fetcher.data.username,
+        token: fetcher.data.token,
+      });
     }
-  });
+  }, [fetcher.data]);
 
   return (
     <>
@@ -68,7 +68,6 @@ export const handleLogIn = async ({ request }) => {
     username: formData.get("username"),
     password: formData.get("password"),
   };
-  console.log(submission);
   const res = await handleFetch(`/log-in`, submission, "post");
   if (res.ok) {
     const data = await res.json();
@@ -79,9 +78,10 @@ export const handleLogIn = async ({ request }) => {
       },
     };
     localStorage.setItem("token", user.user.token);
-    return redirect("/");
+    return data;
+  } else {
+    return await res.json();
   }
-  return await res.json();
 };
 
 export default LogIn;
