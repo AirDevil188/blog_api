@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 import "./index.css";
 
 const App = () => {
-  const [userObject, setUserObject] = useState("");
+  const [userObject, setUserObject] = useState({ token: null, username: null });
   const [errors, setErrors] = useState(null);
   const [hamburger, setHamburger] = useState(false);
 
@@ -18,9 +18,8 @@ const App = () => {
         username: token.username,
         token: localStorage.getItem("token"),
       });
-      console.log(userObject);
     }
-  }, []);
+  }, [userObject.token]);
   return (
     <>
       <NavBar
