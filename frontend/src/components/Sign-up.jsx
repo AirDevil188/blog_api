@@ -1,41 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import styles from "../components/Sign-up.module.css";
+import { handleFetch } from "../utils/handleFetch";
 
 const SignUp = () => {
   const {
-    userObject: [userObject, setUserObject],
+    userObject: [userObject],
     errors: [errors, setErrors],
   } = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userObject) {
+    if (userObject.token) {
       navigate("/");
     }
-  });
+  }, [userObject.token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const submission = {
+      username: formData.get("username"),
+      password: formData.get("password"),
+      confirm_password: formData.get("confirm_password"),
+    };
     try {
-      const response = await fetch("http://localhost:3000/sign-up", {
-        mode: "cors",
-        method: "POST",
-        body: JSON.stringify({
-          username: formData.get("username"),
-          password: formData.get("password"),
-          confirm_password: formData.get("confirm_password"),
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        navigate("/");
+      const res = await handleFetch("/sign-up", submission, "POST");
+      if (res.ok) {
+        return navigate("/");
+      } else {
+        setErrors(await res.json());
       }
-      setErrors(await response.json());
-      console.log(errors);
     } catch (err) {
       console.log(err);
       return err;
