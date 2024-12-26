@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { validateJWT } from "./helper/validateJWT";
 import NavBar from "./components/Navbar";
