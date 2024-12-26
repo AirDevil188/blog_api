@@ -2,6 +2,7 @@ import styles from "./Navbar.module.css";
 import { RxHamburgerMenu } from "react-icons/rx";
 import useClickOutside from "../hooks/useClickOutside";
 import { Link, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const NavBar = ({ user, setUserObject, hamburger, setHamburger }) => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const NavBar = ({ user, setUserObject, hamburger, setHamburger }) => {
             <Link to={"/"} onClick={() => setHamburger(false)}>
               <li>Home</li>
             </Link>
-            {!user ? (
+            {!user.token ? (
               <>
                 <Link to={"/log-in"} onClick={() => setHamburger(false)}>
                   <li>Log In</li>
@@ -55,4 +56,10 @@ const NavBar = ({ user, setUserObject, hamburger, setHamburger }) => {
   );
 };
 
+NavBar.propTypes = {
+  user: PropTypes.object,
+  setUserObject: PropTypes.func,
+  hamburger: PropTypes.bool,
+  setHamburger: PropTypes.func,
+};
 export default NavBar;
