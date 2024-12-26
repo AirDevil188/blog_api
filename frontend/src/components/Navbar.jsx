@@ -8,7 +8,7 @@ const NavBar = ({ user, setUserObject, hamburger, setHamburger }) => {
   const navigate = useNavigate();
   const handleLogOut = () => {
     localStorage.clear();
-    setUserObject("");
+    setUserObject({ ...user, username: null, token: null });
     navigate("/log-in");
   };
 
