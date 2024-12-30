@@ -1,0 +1,31 @@
+.mainContainer {
+  padding: 1rem;
+}
+
+.postDetails {
+  display: flex;
+  width: 100%;
+  padding: 1rem;
+  flex-flow: column wrap;
+  color: #000;
+}
+
+.comment {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+form {
+  padding: 0;
+}
+
+.postCommentTitle {
+  padding-top: 20px;
+}
