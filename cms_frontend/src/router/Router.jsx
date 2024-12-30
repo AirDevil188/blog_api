@@ -3,6 +3,8 @@ import App from "../App";
 import LogIn from "../components/Log-In";
 import NewPost from "../components/NewPost";
 import Posts from "../components/Posts";
+import PostDetails, { handleDelete } from "../components/PostDetails";
+import { getPost, getPosts } from "../utils/loaders";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -13,6 +15,7 @@ const Router = () => {
         {
           path: "/",
           element: <Posts />,
+          loader: getPosts,
         },
         {
           path: "/log-in",
@@ -26,6 +29,12 @@ const Router = () => {
         {
           path: "/posts/post/update/:id",
           element: <NewPost />,
+        },
+        {
+          path: "/posts/post/:id",
+          element: <PostDetails />,
+          loader: getPost,
+          action: handleDelete,
         },
       ],
     },
