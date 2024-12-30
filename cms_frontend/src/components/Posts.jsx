@@ -1,35 +1,22 @@
-import { useOutletContext } from "react-router-dom";
+import {
+  Link,
+  redirect,
+  useLoaderData,
+  useOutletContext,
+} from "react-router-dom";
 import styles from "../components/Posts.module.css";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import Button from "./Button";
+import { handleFetch } from "../utils/handleFetch";
 
 const Posts = () => {
-  const [posts, setPosts] = useState(null);
+  const posts = useLoaderData();
 
   const {
     userObject: [userObject],
     errors: [errors, setErrors],
   } = useOutletContext();
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch("http://localhost:3000/posts", {
-        mode: "cors",
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + userObject.token,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setPosts(data);
-      }
-      setErrors(errors);
-    };
-    fetchPosts();
-  });
 
   const handleDelete = async (e) => {
     try {
@@ -45,8 +32,6 @@ const Posts = () => {
       );
       if (response.ok) {
         const data = posts.filter((post) => post.id !== e.target.id);
-
-        setPosts(data);
       }
     } catch (err) {
       console.log(err);
@@ -64,12 +49,7 @@ const Posts = () => {
           {posts
             ? posts.map((post) => {
                 return (
-                  <article
-                    className={styles.post}
-                    id={post.id}
-                    key={post.id}
-                    href={`/posts/post/${post.id}`}
-                  >
+                  <article className={styles.post} id={post.id} key={post.id}>
                     <section className="post-title-section">
                       <h3>{post.title}</h3>
                     </section>
@@ -106,6 +86,37 @@ const Posts = () => {
       </main>
     </>
   );
+};
+
+export const handleSubmit = async ({ request, params }) => {
+  const data = await request.formData();
+  const formData = Object.fromEntries(data);
+  const button = data.get("intent");
+  const { id } = params;
+  const submission = {
+    text: data.get("comment_text"),
+  };
+
+  switch (button) {
+    case "submit":
+      await handleFetch(`/posts/${id}/create`, submission, "POST");
+      break;
+    case "edit":
+      await handleFetch(
+        `/posts/${id}/update/comment/${formData.id}`,
+        submission,
+        "PUT"
+      );
+      break;
+    case "delete":
+      await handleFetch(
+        `/posts/${id}/delete/comment/${formData.id}`,
+        undefined,
+        "DELETE"
+      );
+      break;
+  }
+  return redirect(`/posts/post/${id}`);
 };
 
 export default Posts;
