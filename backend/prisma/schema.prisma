@@ -19,7 +19,7 @@ model User {
   password String
   posts    Post[]
   comments Comment[]
-  role String @default("user")
+  role     String    @default("user")
 }
 
 model Post {
@@ -31,15 +31,15 @@ model Post {
   user      User      @relation(fields: [userId], references: [id])
   userId    String
   comments  Comment[]
-  publish Boolean @default(true)
+  publish   Boolean   @default(true)
 }
 
 model Comment {
   id        String   @id @default(uuid())
-  text String
+  text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
