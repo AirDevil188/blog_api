@@ -2,20 +2,23 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "../App";
 import LogIn from "../components/Log-In";
 import NewPost from "../components/NewPost";
-import Posts from "../components/Posts";
+import Posts, { handleSubmit } from "../components/Posts";
 import PostDetails, { handleDelete } from "../components/PostDetails";
 import { getPost, getPosts } from "../utils/loaders";
+import Error from "../components/ErrorElement";
 
 const Router = () => {
   const router = createBrowserRouter([
     {
       element: <App />,
+      errorElement: <Error />,
       path: "/",
       children: [
         {
           path: "/",
           element: <Posts />,
           loader: getPosts,
+          action: handleSubmit,
         },
         {
           path: "/log-in",
