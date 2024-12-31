@@ -6,6 +6,7 @@ import { handleFetch } from "../utils/handleFetch";
 const LogIn = () => {
   const navigate = useNavigate();
   const fetcher = useFetcher();
+  console.log(fetcher.data);
 
   const {
     userObject: [userObject, setUserObject],
@@ -19,13 +20,17 @@ const LogIn = () => {
   }, [userObject.token]);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) setErrors(fetcher.data);
-    else {
+    console.log(fetcher.data);
+    if (!localStorage.getItem("token")) {
+      setErrors(fetcher.data);
+      return;
+    }
+    if (fetcher.data) {
       setUserObject({
         ...userObject,
-        username: fetcher.data.username,
         token: fetcher.data.token,
       });
+      navigate("/");
     }
   }, [fetcher.data]);
 
