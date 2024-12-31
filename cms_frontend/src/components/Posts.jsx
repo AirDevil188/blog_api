@@ -1,43 +1,12 @@
-import {
-  Link,
-  redirect,
-  useLoaderData,
-  useOutletContext,
-} from "react-router-dom";
+import { redirect, useLoaderData, useFetcher } from "react-router-dom";
 import styles from "../components/Posts.module.css";
-import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import Button from "./Button";
 import { handleFetch } from "../utils/handleFetch";
 
 const Posts = () => {
   const posts = useLoaderData();
-
-  const {
-    userObject: [userObject],
-    errors: [errors, setErrors],
-  } = useOutletContext();
-
-  const handleDelete = async (e) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/posts/post/delete/${e.target.id}`,
-        {
-          mode: "cors",
-          method: "DELETE",
-          headers: {
-            Authorization: "Bearer " + userObject.token,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = posts.filter((post) => post.id !== e.target.id);
-      }
-    } catch (err) {
-      console.log(err);
-      return err;
-    }
-  };
+  const fetcher = useFetcher();
 
   return (
     <>
@@ -49,7 +18,12 @@ const Posts = () => {
           {posts
             ? posts.map((post) => {
                 return (
-                  <article className={styles.post} id={post.id} key={post.id}>
+                  <a
+                    className={styles.post}
+                    id={post.id}
+                    key={post.id}
+                    href={`posts/post/${post.id}`}
+                  >
                     <section className="post-title-section">
                       <h3>{post.title}</h3>
                     </section>
@@ -64,21 +38,26 @@ const Posts = () => {
                       </small>
                     </section>
                     <section className="post-buttons-section">
-                      <a href={`posts/post/update/${post.id}`}>
+                      <fetcher.Form method="POST">
+                        <input type="hidden" name="id" value={post.id} />
+
                         <Button
                           text={"EDIT"}
-                          type={"button"}
+                          type={"submit"}
+                          value={"edit"}
+                          name={"intent"}
                           id={post.id}
                         ></Button>
-                      </a>
-                      <Button
-                        text={"DELETE"}
-                        type={"button"}
-                        onClick={handleDelete}
-                        id={post.id}
-                      ></Button>
+                        <Button
+                          text={"DELETE"}
+                          type={"submit"}
+                          value={"delete"}
+                          name={"intent"}
+                          id={post.id}
+                        ></Button>
+                      </fetcher.Form>
                     </section>
-                  </article>
+                  </a>
                 );
               })
             : null}
@@ -88,35 +67,26 @@ const Posts = () => {
   );
 };
 
-export const handleSubmit = async ({ request, params }) => {
+export const handleSubmit = async ({ request }) => {
   const data = await request.formData();
   const formData = Object.fromEntries(data);
+
   const button = data.get("intent");
-  const { id } = params;
-  const submission = {
-    text: data.get("comment_text"),
-  };
+  console.log(button);
 
   switch (button) {
-    case "submit":
-      await handleFetch(`/posts/${id}/create`, submission, "POST");
-      break;
     case "edit":
-      await handleFetch(
-        `/posts/${id}/update/comment/${formData.id}`,
-        submission,
-        "PUT"
-      );
-      break;
+      return redirect(`posts/post/update/${formData.id}`);
+
     case "delete":
       await handleFetch(
-        `/posts/${id}/delete/comment/${formData.id}`,
+        `/posts/post/delete/${formData.id}`,
         undefined,
         "DELETE"
       );
       break;
   }
-  return redirect(`/posts/post/${id}`);
+  return redirect(`/`);
 };
 
 export default Posts;
