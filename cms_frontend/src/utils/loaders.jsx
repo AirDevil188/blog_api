@@ -20,4 +20,24 @@ export const getPost = async ({ params }) => {
   if (res.status === 404) {
     throw new Error("Post not Found");
   }
+
+  if (res.status === 401) {
+    throw new Error("You are not authorized to access this page!");
+  }
+};
+
+export const updatePost = async ({ params }) => {
+  const { id } = params;
+  const res = await handleFetch(`/posts/post/update/${id}`);
+
+  if (res.ok) {
+    return await res.json();
+  }
+
+  if (res.status === 404) {
+    throw new Error("Post not Found");
+  }
+  if (res.status === 401) {
+    throw new Error("You are not authorized to access this page");
+  }
 };
