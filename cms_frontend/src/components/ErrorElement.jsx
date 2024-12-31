@@ -7,7 +7,16 @@ const Error = () => {
     <>
       <main>
         <section className="error-section">
-          <p>{error.message}</p>
+          {error.message === "Posts Not Found" ? (
+            <>
+              <span>{error.message}</span>
+              <div>
+                <a href="/new-post">New Post</a>
+              </div>
+            </>
+          ) : (
+            <span>{error.message}</span>
+          )}
         </section>
       </main>
     </>
