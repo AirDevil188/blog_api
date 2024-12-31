@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { validateJWT } from "./helper/validateJWT";
 
 const App = () => {
-  const [userObject, setUserObject] = useState("");
+  const [userObject, setUserObject] = useState({ token: null, username: null });
   const [errors, setErrors] = useState(null);
 
   useEffect(() => {
@@ -14,9 +14,8 @@ const App = () => {
         username: token.username,
         token: localStorage.getItem("token"),
       });
-      console.log(userObject);
     }
-  }, []);
+  }, [userObject.token]);
 
   return (
     <>
