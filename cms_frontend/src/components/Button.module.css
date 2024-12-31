@@ -5,4 +5,5 @@ button {
   background-color: var(---btn-bg-color);
   color: #fff;
   border: none;
+  cursor: pointer;
 }
