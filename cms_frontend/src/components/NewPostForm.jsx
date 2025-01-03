@@ -4,8 +4,10 @@ import InputWrapper from "./InputWrapper";
 import { Editor } from "@tinymce/tinymce-react";
 import styles from "../components/Button.module.css";
 import { useFetcher } from "react-router-dom";
+import { useState } from "react";
 
 const NewPostCard = ({ edit }) => {
+  const [isPublished, setIsPublished] = useState(edit ? edit.publish : true);
   const fetcher = useFetcher();
   return (
     <>
@@ -50,6 +52,21 @@ const NewPostCard = ({ edit }) => {
               ],
             }}
             initialValue={edit ? edit.text : "Write post..."}
+          />
+          <label htmlFor="publish">Publish:</label>
+          <input
+            type="hidden"
+            id="publish"
+            name="publish"
+            value={isPublished}
+          />
+          <input
+            type="checkbox"
+            name="publish"
+            id="publish"
+            checked={isPublished}
+            onChange={() => setIsPublished(!isPublished)}
+            value={isPublished}
           />
 
           <Button

@@ -20,6 +20,7 @@ export const handleAction = async ({ request, params }) => {
   const submission = {
     title: data.get("title"),
     text: data.get("text"),
+    publish: JSON.parse(data.get("publish")),
   };
   const { id } = params;
 
