@@ -60,6 +60,7 @@ async function getAllPosts() {
         title: true,
         createdAt: true,
         id: true,
+        publish: true,
         user: {
           select: {
             username: true,
@@ -86,6 +87,7 @@ async function getPost(id) {
         updatedAt: true,
         text: true,
         title: true,
+        publish: true,
         comments: {
           select: {
             id: true,
@@ -108,12 +110,13 @@ async function getPost(id) {
   }
 }
 
-async function createPost(title, text, user) {
+async function createPost(title, text, publish, user) {
   try {
     return prisma.post.create({
       data: {
         title: title,
         text: text,
+        publish: publish,
         userId: user,
       },
     });
@@ -134,7 +137,7 @@ async function deletePost(id) {
   }
 }
 
-async function updatePost(title, text, id) {
+async function updatePost(title, text, publish, id) {
   try {
     return prisma.post.update({
       where: {
@@ -143,6 +146,7 @@ async function updatePost(title, text, id) {
       data: {
         title: title,
         text: text,
+        publish: publish,
       },
     });
   } catch (err) {

@@ -18,8 +18,8 @@ const getPostDetails = asyncHandler(async (req, res, next) => {
 });
 
 const createPost = asyncHandler(async (req, res, next) => {
-  const { title, text } = req.body;
-  const post = await db.createPost(title, text, req.user.user);
+  const { title, text, publish } = req.body;
+  const post = await db.createPost(title, text, publish, req.user.user);
   return res.json(post);
 });
 
@@ -32,8 +32,8 @@ const getUpdatePost = asyncHandler(async (req, res, next) => {
 });
 
 const updatePost = asyncHandler(async (req, res, next) => {
-  const { title, text } = req.body;
-  const post = await db.updatePost(title, text, req.params.id);
+  const { title, text, publish } = req.body;
+  const post = await db.updatePost(title, text, publish, req.params.id);
   return res.json(post);
 });
 
