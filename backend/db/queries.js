@@ -103,6 +103,17 @@ async function getPost(id) {
             },
           },
         },
+        categories: {
+          select: {
+            category: {
+              select: {
+                id: true,
+                title: true,
+                userId: false,
+              },
+            },
+          },
+        },
       },
     });
   } catch (err) {
@@ -110,7 +121,7 @@ async function getPost(id) {
   }
 }
 
-async function createPost(title, text, publish, user) {
+async function createPost(title, text, categories, publish, user) {
   try {
     return prisma.post.create({
       data: {
@@ -118,6 +129,11 @@ async function createPost(title, text, publish, user) {
         text: text,
         publish: publish,
         userId: user,
+        categories: {
+          create: categories.map((category) => ({
+            category: { connect: { id: category } },
+          })),
+        },
       },
     });
   } catch (err) {
@@ -137,8 +153,9 @@ async function deletePost(id) {
   }
 }
 
-async function updatePost(title, text, publish, id) {
+async function updatePost(title, text, categories, publish, id) {
   try {
+    await deletePostCategory(id);
     return prisma.post.update({
       where: {
         id: id,
@@ -147,6 +164,13 @@ async function updatePost(title, text, publish, id) {
         title: title,
         text: text,
         publish: publish,
+        categories: {
+          create: categories.map((category) => ({
+            category: {
+              connect: { id: category },
+            },
+          })),
+        },
       },
     });
   } catch (err) {
@@ -222,6 +246,72 @@ async function deleteComment(id) {
     console.log(err);
   }
 }
+
+async function getAllCategories() {
+  try {
+    return prisma.category.findMany({
+      select: {
+        title: true,
+        id: true,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
+async function getPostCategory(postId) {
+  try {
+    return prisma.postCategory.findMany({
+      where: {
+        postId: postId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
+async function createCategory(title, userId) {
+  try {
+    return prisma.category.create({
+      data: {
+        title: title,
+        userId: userId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
+async function deleteCategory(id) {
+  try {
+    return prisma.category.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
+async function deletePostCategory(id) {
+  try {
+    return prisma.postCategory.deleteMany({
+      where: { postId: id },
+    });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
 module.exports = {
   deserializeUser,
   findUser,
@@ -238,4 +328,8 @@ module.exports = {
   deletePost,
   getPost,
   getUser,
+  getAllCategories,
+  getPostCategory,
+  createCategory,
+  deleteCategory,
 };
