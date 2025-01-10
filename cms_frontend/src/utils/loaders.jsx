@@ -41,3 +41,15 @@ export const updatePost = async ({ params }) => {
     throw new Error("You are not authorized to access this page");
   }
 };
+
+export const getCategories = async () => {
+  const res = await handleFetch("/categories", undefined, "GET");
+
+  if (res.ok) {
+    return await res.json();
+  }
+
+  if (res.status === "404") {
+    throw new Error("Categories not Found");
+  }
+};
