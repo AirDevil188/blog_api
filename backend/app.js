@@ -18,6 +18,7 @@ app.use(
 const postRouter = require("./routes/postRouter");
 const userRouter = require("./routes/userRouter");
 const commentRouter = require("./routes/commentRouter");
+const categoryRouter = require("./routes/categoryRouter");
 
 require("./config/passport");
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/posts", postRouter);
 app.use("/posts/:postId", commentRouter);
+app.use("/categories", categoryRouter);
 app.use("/", userRouter);
 
 app.listen(process.env.PORT, () =>
