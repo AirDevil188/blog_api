@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes, { bool, string } from "prop-types";
 import styles from "../components/Form.module.css";
 
 const InputWrapper = ({
@@ -9,6 +9,7 @@ const InputWrapper = ({
   isRequired,
   id,
   value,
+  check,
 }) => {
   return (
     <div className={styles[className]}>
@@ -19,6 +20,7 @@ const InputWrapper = ({
         id={id}
         name={name}
         defaultValue={value}
+        defaultChecked={check}
       />
     </div>
   );
@@ -29,9 +31,10 @@ InputWrapper.propTypes = {
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  isRequired: PropTypes.bool.isRequired,
+  isRequired: PropTypes.bool,
   id: PropTypes.string.isRequired,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([string, bool]),
+  check: PropTypes.bool,
 };
 
 export default InputWrapper;
