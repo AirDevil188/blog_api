@@ -18,22 +18,41 @@ const getPostDetails = asyncHandler(async (req, res, next) => {
 });
 
 const createPost = asyncHandler(async (req, res, next) => {
-  const { title, text, publish } = req.body;
-  const post = await db.createPost(title, text, publish, req.user.user);
+  const { title, text, category, publish } = req.body;
+
+  const post = await db.createPost(
+    title,
+    text,
+    category,
+    publish,
+    req.user.user
+  );
   return res.json(post);
 });
 
 const getUpdatePost = asyncHandler(async (req, res, next) => {
-  const post = await db.getPost(req.params.id);
+  const [postCategories, allCategories, post] = await Promise.all([
+    db.getPostCategory(req.params.id),
+    db.getAllCategories(),
+    db.getPost(req.params.id),
+  ]);
+
   if (!post) {
     return res.status(404).json({ message: "Post Not Found!" });
   }
-  return res.json(post);
+  return res.json({ postCategories, allCategories, post });
 });
 
 const updatePost = asyncHandler(async (req, res, next) => {
-  const { title, text, publish } = req.body;
-  const post = await db.updatePost(title, text, publish, req.params.id);
+  const { title, text, category, publish } = req.body;
+  console.log(category);
+  const post = await db.updatePost(
+    title,
+    text,
+    category,
+    publish,
+    req.params.id
+  );
   return res.json(post);
 });
 
