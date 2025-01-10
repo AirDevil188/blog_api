@@ -1,21 +1,23 @@
 import styles from "../components/NewPost.module.css";
-import PostCard from "./PostCard";
 import { redirect, useLoaderData } from "react-router-dom";
 import { handleFetch } from "../utils/handleFetch";
+import PostCard from "./PostCard";
 
-const NewPost = () => {
-  const categories = useLoaderData();
+const UpdatePost = () => {
+  const edit = useLoaderData();
+
   return (
     <>
       <section className={styles.newPostSection}>
-        <PostCard categories={categories} />
+        <PostCard edit={edit} categories={edit.allCategories} />
       </section>
     </>
   );
 };
 
-export const handleAction = async ({ request, params }) => {
+export const handleUpdateAction = async ({ request, params }) => {
   const data = await request.formData();
+
   const submission = {
     title: data.get("title"),
     text: data.get("text"),
@@ -27,11 +29,8 @@ export const handleAction = async ({ request, params }) => {
   };
   const { id } = params;
 
-  switch (id) {
-    case undefined:
-      await handleFetch(`/posts/create-post`, submission, "POST");
-      return redirect(`/`);
-  }
+  await handleFetch(`/posts/post/update/${id}`, submission, "PUT");
+  return redirect(`/posts/post/${id}`);
 };
 
-export default NewPost;
+export default UpdatePost;
