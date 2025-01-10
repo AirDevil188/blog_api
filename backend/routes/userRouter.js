@@ -7,7 +7,7 @@ userRouter.post("/sign-up", userController.createUser);
 
 userRouter.post("/log-in", userController.logInUser);
 
-userRouter.post("/cms-log-in/", userController.logInAdmin);
+userRouter.post("/cms-log-in", userController.logInAdmin);
 
 userRouter.get("/users", userController.getAllUsers);
 
