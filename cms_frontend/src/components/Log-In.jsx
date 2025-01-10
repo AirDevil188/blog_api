@@ -69,7 +69,7 @@ export const handleSubmitLogIn = async ({ request }) => {
     username: formData.get("username"),
     password: formData.get("password"),
   };
-  const res = await handleFetch(`/log-in`, submission, "post");
+  const res = await handleFetch(`/cms-log-in`, submission, "post");
   if (res.ok) {
     const data = await res.json();
     const user = {
