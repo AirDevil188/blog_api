@@ -20,6 +20,7 @@ model User {
   posts      Post[]
   comments   Comment[]
   categories Category[]
+  tags       Tag[]
   role       String     @default("user")
 }
 
@@ -33,6 +34,7 @@ model Post {
   userId     String
   comments   Comment[]
   categories PostCategory[]
+  tags       Tag[]
   publish    Boolean        @default(true)
 }
 
@@ -53,6 +55,14 @@ model Category {
   posts  PostCategory[]
   User   User           @relation(fields: [userId], references: [id])
   userId String
+}
+
+model Tag {
+  id     String  @id @default(uuid())
+  title  String  @unique
+  posts  Post[]
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
 
 model PostCategory {
