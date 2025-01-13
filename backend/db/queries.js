@@ -68,6 +68,19 @@ async function getAllPosts() {
             password: false,
           },
         },
+        categories: {
+          select: {
+            postId: false,
+            categoryId: false,
+            category: {
+              select: {
+                title: true,
+                id: true,
+                userId: false,
+              },
+            },
+          },
+        },
       },
     });
   } catch (err) {
