@@ -18,6 +18,7 @@ export const handleAction = async ({ request, params }) => {
   const data = await request.formData();
   const submission = {
     title: data.get("title"),
+    tags: data.getAll("tags"),
     text: data.get("text"),
     category:
       data.getAll("category").length === 0

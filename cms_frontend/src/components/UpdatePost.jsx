@@ -25,6 +25,7 @@ export const handleUpdateAction = async ({ request, params }) => {
       data.getAll("category").length === 0
         ? [data.get("no_category")]
         : data.getAll("category"),
+    tags: data.getAll("tags"),
     publish: JSON.parse(data.get("publish")),
   };
   const { id } = params;
