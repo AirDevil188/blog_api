@@ -18,12 +18,14 @@ const getPostDetails = asyncHandler(async (req, res, next) => {
 });
 
 const createPost = asyncHandler(async (req, res, next) => {
-  const { title, text, category, publish } = req.body;
+  const { title, text, category, tags, publish } = req.body;
+  const arrTags = tags.toString().split(/,\s*/);
 
   const post = await db.createPost(
     title,
     text,
     category,
+    arrTags,
     publish,
     req.user.user
   );
@@ -37,21 +39,29 @@ const getUpdatePost = asyncHandler(async (req, res, next) => {
     db.getPost(req.params.id),
   ]);
 
+  const tagArr = [];
+  post.tags.map((tag) => {
+    tagArr.push(tag.title);
+  });
+  const tags = tagArr.toString().replaceAll(",", ", ");
+
   if (!post) {
     return res.status(404).json({ message: "Post Not Found!" });
   }
-  return res.json({ postCategories, allCategories, post });
+  return res.json({ postCategories, allCategories, post, tags });
 });
 
 const updatePost = asyncHandler(async (req, res, next) => {
-  const { title, text, category, publish } = req.body;
-  console.log(category);
+  const { title, text, category, tags, publish } = req.body;
+  const arrTags = tags.toString().split(/,\s*/);
   const post = await db.updatePost(
     title,
     text,
     category,
+    arrTags,
     publish,
-    req.params.id
+    req.params.id,
+    req.user.user
   );
   return res.json(post);
 });
