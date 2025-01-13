@@ -70,6 +70,7 @@ const PostCard = ({ edit, categories }) => {
             id="tags"
             name="tags"
             value={edit ? edit.tags : null}
+            isRequired={true}
           />
 
           <div className="form-group">
