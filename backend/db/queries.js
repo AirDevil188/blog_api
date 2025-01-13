@@ -114,6 +114,13 @@ async function getPost(id) {
             },
           },
         },
+        tags: {
+          select: {
+            title: true,
+            userId: false,
+            id: false,
+          },
+        },
       },
     });
   } catch (err) {
@@ -121,7 +128,7 @@ async function getPost(id) {
   }
 }
 
-async function createPost(title, text, categories, publish, user) {
+async function createPost(title, text, categories, tags, publish, user) {
   try {
     return prisma.post.create({
       data: {
@@ -132,6 +139,17 @@ async function createPost(title, text, categories, publish, user) {
         categories: {
           create: categories.map((category) => ({
             category: { connect: { id: category } },
+          })),
+        },
+        tags: {
+          connectOrCreate: tags.map((tag) => ({
+            where: {
+              title: tag,
+            },
+            create: {
+              title: tag,
+              userId: user,
+            },
           })),
         },
       },
@@ -153,9 +171,10 @@ async function deletePost(id) {
   }
 }
 
-async function updatePost(title, text, categories, publish, id) {
+async function updatePost(title, text, categories, tags, publish, id, userId) {
   try {
     await deletePostCategory(id);
+
     return prisma.post.update({
       where: {
         id: id,
@@ -168,6 +187,18 @@ async function updatePost(title, text, categories, publish, id) {
           create: categories.map((category) => ({
             category: {
               connect: { id: category },
+            },
+          })),
+        },
+        tags: {
+          set: [],
+          connectOrCreate: tags.map((tag) => ({
+            where: {
+              title: tag,
+            },
+            create: {
+              title: tag,
+              userId: userId,
             },
           })),
         },
@@ -312,6 +343,20 @@ async function deletePostCategory(id) {
   }
 }
 
+async function getAllTags() {
+  try {
+    return prisma.tag.findMany({
+      select: {
+        title: true,
+        id: true,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
 module.exports = {
   deserializeUser,
   findUser,
@@ -332,4 +377,5 @@ module.exports = {
   getPostCategory,
   createCategory,
   deleteCategory,
+  getAllTags,
 };
