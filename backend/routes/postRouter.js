@@ -9,6 +9,11 @@ const auth = require("../middlewares/auth");
 postRouter.get("/", postController.getAllPosts);
 
 postRouter.get(
+  "/create-post",
+  passport.authenticate("jwt", { session: false }, auth.roleCheck)
+);
+
+postRouter.get(
   "/post/:id",
   passport.authenticate("jwt", { session: false, failWithError: true }),
   (err, req, res, next) => {

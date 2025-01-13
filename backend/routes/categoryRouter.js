@@ -5,7 +5,11 @@ const passport = require("passport");
 
 const categoryRouter = Router();
 
-categoryRouter.get("/", categoryController.getCategories);
+categoryRouter.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  categoryController.getCategories
+);
 
 categoryRouter.post(
   "/create-category",
