@@ -49,7 +49,11 @@ export const getCategories = async () => {
     return await res.json();
   }
 
-  if (res.status === "404") {
+  if (res.status === 401) {
+    throw new Error("You are not authorized to access this page");
+  }
+
+  if (res.status === 404) {
     throw new Error("Categories not Found");
   }
 };
