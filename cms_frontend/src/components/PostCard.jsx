@@ -63,6 +63,15 @@ const PostCard = ({ edit, categories }) => {
             }}
             initialValue={edit ? edit.post.text : "Write post..."}
           />
+
+          <InputWrapper
+            label="Create tags: "
+            type="text"
+            id="tags"
+            name="tags"
+            value={edit ? edit.tags : null}
+          />
+
           <div className="form-group">
             {allCategories
               ? allCategories.map((category) => {
