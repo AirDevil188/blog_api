@@ -1,7 +1,6 @@
 import {
   redirect,
   useLoaderData,
-  useFetcher,
   useOutletContext,
   useNavigate,
 } from "react-router-dom";
@@ -10,11 +9,18 @@ import { DateTime } from "luxon";
 import Button from "./Button";
 import { handleFetch } from "../utils/handleFetch";
 import { RiDraftLine } from "react-icons/ri";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import DeleteModal from "./DeleteModal";
 
 const Posts = () => {
   const posts = useLoaderData();
-  const fetcher = useFetcher();
+  const [modal, setModal] = useState(false);
+  const postId = useRef(null);
+
+  const handleModal = (e) => {
+    setModal(true);
+    postId.current = e.target.id;
+  };
   const {
     userObject: [userObject],
   } = useOutletContext();
@@ -35,65 +41,79 @@ const Posts = () => {
             <span>Author</span>
             <span>Categories</span>
             <span>Buttons</span>
-            <span></span>
           </section>
           <section className={styles.posts}>
             {posts
               ? posts.map((post) => {
                   return (
-                    <a
-                      className={styles.post}
-                      id={post.id}
-                      key={post.id}
-                      href={`posts/post/${post.id}`}
-                    >
-                      <section className="post-title-section">
-                        <h3>{post.title}</h3>
-                        {!post.publish ? (
-                          <>
-                            <div className="post-draft">
-                              <small>Draft</small>
-                              <RiDraftLine />
-                            </div>
-                          </>
-                        ) : null}
-                      </section>
+                    <article key={post.id} id={post.id} className={styles.post}>
+                      <a href={`posts/post/${post.id}`}>
+                        <section className="post-title-section">
+                          <h3>{post.title}</h3>
+                          {!post.publish ? (
+                            <>
+                              <div className={styles.postDraft}>
+                                <small>Draft</small>
+                                <RiDraftLine />
+                              </div>
+                            </>
+                          ) : null}
+                        </section>
 
-                      <section className="post-details-section">
-                        <div>
-                          <small>User: {post.user.username} </small>
-                        </div>
-                        <small>
-                          Created At:
-                          {new DateTime(post.createdAt).toLocaleString()}
-                        </small>
-                      </section>
+                        <section className={styles.postUserSection}>
+                          <div>
+                            <small>User: {post.user.username} </small>
+                          </div>
+                          <small>
+                            Created At:
+                            {new DateTime(post.createdAt).toLocaleString()}
+                          </small>
+                        </section>
+                        <section className={styles.postCategoriesSection}>
+                          {post.categories
+                            ? post.categories.map((category) => {
+                                return (
+                                  <span key={category.category.id}>
+                                    <>
+                                      <small>{category.category.title}</small>
+                                    </>
+                                  </span>
+                                );
+                              })
+                            : null}
+                        </section>
+                      </a>
                       <section className={styles.postButtonsSection}>
-                        <fetcher.Form method="POST">
-                          <input type="hidden" name="id" value={post.id} />
-
+                        <input type="hidden" name="id" value={post.id} />
+                        <a href={`/posts/post/update/${post.id}`}>
                           <Button
                             text={"EDIT"}
-                            type={"submit"}
+                            type={"button"}
                             value={"edit"}
                             name={"intent"}
                             id={post.id}
                           ></Button>
-                          <Button
-                            text={"DELETE"}
-                            type={"submit"}
-                            value={"delete"}
-                            name={"intent"}
-                            id={post.id}
-                          ></Button>
-                        </fetcher.Form>
+                        </a>
+                        <Button
+                          text={"DELETE"}
+                          type={"button"}
+                          name={"intent"}
+                          id={post.id}
+                          onClick={handleModal}
+                        ></Button>
                       </section>
-                    </a>
+                    </article>
                   );
                 })
               : null}
           </section>
         </section>
+
+        <DeleteModal
+          modal={modal}
+          setModal={setModal}
+          postId={postId.current}
+        />
       </main>
     </>
   );

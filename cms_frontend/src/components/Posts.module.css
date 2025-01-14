@@ -5,18 +5,17 @@
 
 .mainContainer {
   padding: 1rem;
+  display: flex;
+  flex-flow: column wrap;
 }
 
 .postsSection {
-  display: flex;
   width: 100%;
-  flex-flow: column wrap;
-  gap: 20px;
-  padding: 2rem;
-  align-items: flex-start;
+  height: 100%;
 }
 
 .postsHeader {
+  display: none;
 }
 
 .titleSection {
@@ -24,73 +23,106 @@
   padding-left: 2rem;
 }
 
-.postButtonsSection {
+.postCategoriesSection {
   display: flex;
   flex-flow: column wrap;
-  gap: 10px;
+  /* gap: 1px; */
 }
-
 .postButtonsSection > form {
   display: flex;
   flex-flow: column wrap;
+}
+
+.postButtonsSection {
+  display: flex;
   gap: 10px;
 }
 
 .post {
   display: flex;
-  border: 2px solid var(--border-color);
+  flex-flow: column wrap;
   justify-content: space-between;
+  border: 1px solid var(--border-color);
   padding: 1rem;
-  flex-flow: row nowrap;
   color: #000;
+}
+
+.posts {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 10px;
+}
+
+.post > a {
+  color: inherit;
 }
 
 .post:hover {
   color: var(--hover-link-color);
 }
 
-@media (min-width: 800px) {
+@media (min-width: 550px) {
   .mainContainer {
     display: grid;
-    padding: 1rem;
     grid-template-columns: repeat(3, 1fr);
   }
 
   .postsHeader {
-    display: grid;
+    display: flex;
+    justify-content: space-around;
     grid-column: 1/5;
-    justify-content: space-between;
-  }
-
-  .postsHeader span:nth-child(1) {
-    grid-column: 1/2;
-    background-color: red;
-  }
-
-  .postsHeader span:nth-child(2) {
-    grid-column: 2/3;
-    background-color: blue;
-  }
-
-  .postsHeader span:nth-child(3) {
-    grid-column: 3/4;
-    background-color: yellow;
-  }
-
-  .postsHeader span:nth-child(4) {
-    grid-column: 4/5;
-    background-color: green;
   }
 
   .posts {
     display: grid;
+    grid-template-columns: repeat(4, 1fr);
     grid-column: 1/5;
+    padding: 0 0 1rem;
+  }
+
+  .post > a {
+    display: flex;
+    flex-flow: row nowrap;
+    grid-column: 1/4;
+    text-align: center;
+  }
+
+  .post > a > section {
+    flex-basis: 100%;
+  }
+
+  .post {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column: 1/5;
+    padding: 1rem 0 1rem 0;
+  }
+
+  .post > section {
+    display: flex;
+    flex-basis: 100%;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
   }
   .postsSection {
     display: grid;
     grid-column: 1/5;
+    height: auto;
   }
-  .postButtonsSection > form {
-    flex-flow: row wrap;
+
+  .postUserSection {
+    flex-flow: column wrap;
+  }
+
+  .postsHeader > span {
+    flex-grow: 1;
+    flex-basis: 100%;
+    text-align: center;
+  }
+
+  .postCategoriesSection {
+    display: flex;
+    flex-flow: column wrap;
   }
 }
