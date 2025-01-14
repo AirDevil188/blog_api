@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { validateJWT } from "./helper/validateJWT";
 import NavBar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const App = () => {
   const [userObject, setUserObject] = useState({ token: null, username: null });
@@ -33,6 +34,7 @@ const App = () => {
           errors: [errors, setErrors],
         }}
       />
+      <Footer></Footer>
     </>
   );
 };
