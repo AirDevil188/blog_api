@@ -1,6 +1,6 @@
 import styles from "./Navbar.module.css";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import useClickOutside from "../hooks/useClickOutside";
 
@@ -28,7 +28,9 @@ const NavBar = ({ user, setUserObject, hamburger, setHamburger }) => {
           <RxHamburgerMenu size={30} />
         </button>
         <section className={styles.logoSection}>
-          <h1>A Blog</h1>
+          <NavLink to={"/"}>
+            <h1>CMS - A Blog</h1>
+          </NavLink>
         </section>
         <nav className={styles.nav}>
           <menu className={hamburger ? styles.menuOpen : styles.menuClose}>
