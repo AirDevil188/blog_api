@@ -7,9 +7,11 @@ const NewPost = () => {
   const categories = useLoaderData();
   return (
     <>
-      <section className={styles.newPostSection}>
-        <PostCard categories={categories} />
-      </section>
+      <main>
+        <section className={styles.newPostSection}>
+          <PostCard categories={categories} />
+        </section>
+      </main>
     </>
   );
 };

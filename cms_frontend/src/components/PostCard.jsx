@@ -5,6 +5,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import styles from "../components/Button.module.css";
 import { useFetcher } from "react-router-dom";
 import { useState } from "react";
+import stylesPostCard from "./PostCard.module.css";
 
 const PostCard = ({ edit, categories }) => {
   const [isPublished, setIsPublished] = useState(
@@ -23,7 +24,7 @@ const PostCard = ({ edit, categories }) => {
     <>
       <>
         <h3>{edit ? "Edit Post" : "Create Post"}</h3>
-        <fetcher.Form method={"POST"}>
+        <fetcher.Form method={"POST"} className={stylesPostCard.form}>
           <InputWrapper
             label={"Title: "}
             type={"text"}
@@ -74,11 +75,15 @@ const PostCard = ({ edit, categories }) => {
           />
 
           <div className="form-group">
+            <p className={stylesPostCard.categoriesHeading}>Categories: </p>
             {allCategories
               ? allCategories.map((category) => {
                   if (category.title === "Uncategorized") {
                     return (
-                      <div className="form-category" key={category.id}>
+                      <div
+                        className={stylesPostCard.formCategory}
+                        key={category.id}
+                      >
                         <input
                           type="hidden"
                           name="no_category"
@@ -91,7 +96,10 @@ const PostCard = ({ edit, categories }) => {
                     if (postCategories) {
                       if (postCategories.includes(category.id)) {
                         return (
-                          <div className="form-category" key={category.id}>
+                          <div
+                            className={stylesPostCard.formCategory}
+                            key={category.id}
+                          >
                             <InputWrapper
                               label={category.title}
                               type={"checkbox"}
@@ -105,7 +113,10 @@ const PostCard = ({ edit, categories }) => {
                         );
                       } else {
                         return (
-                          <div className="form-category" key={category.id}>
+                          <div
+                            className={stylesPostCard.formCategory}
+                            key={category.id}
+                          >
                             <InputWrapper
                               label={category.title}
                               type={"checkbox"}
@@ -119,7 +130,10 @@ const PostCard = ({ edit, categories }) => {
                       }
                     } else {
                       return (
-                        <div className="form-category" key={category.id}>
+                        <div
+                          className={stylesPostCard.formCategory}
+                          key={category.id}
+                        >
                           <InputWrapper
                             label={category.title}
                             id={"checkbox"}
@@ -152,11 +166,13 @@ const PostCard = ({ edit, categories }) => {
               value={isPublished}
             />
           </div>
-          <Button
-            type={"submit"}
-            text={"Submit"}
-            className={styles.btnSubmit}
-          ></Button>
+          <div className={stylesPostCard.buttonsContainer}>
+            <Button
+              type={"submit"}
+              text={"Submit"}
+              className={styles.btnSubmit}
+            ></Button>
+          </div>
         </fetcher.Form>
       </>
     </>

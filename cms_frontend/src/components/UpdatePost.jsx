@@ -8,9 +8,11 @@ const UpdatePost = () => {
 
   return (
     <>
-      <section className={styles.newPostSection}>
-        <PostCard edit={edit} categories={edit.allCategories} />
-      </section>
+      <main className={styles.mainContainer}>
+        <section className={styles.newPostSection}>
+          <PostCard edit={edit} categories={edit.allCategories} />
+        </section>
+      </main>
     </>
   );
 };

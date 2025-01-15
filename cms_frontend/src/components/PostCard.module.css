@@ -1,0 +1,22 @@
+form {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 10px;
+}
+
+.formCategory {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 2px;
+}
+.formCategory > div {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.categoriesHeading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-bottom: 2px;
+}
