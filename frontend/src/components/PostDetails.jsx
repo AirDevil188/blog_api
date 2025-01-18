@@ -4,29 +4,42 @@ import {
   useFetcher,
   useLoaderData,
   useOutletContext,
+  useParams,
 } from "react-router-dom";
 import { DateTime } from "luxon";
 import styles from "../components/PostDetails.module.css";
 import Button from "./Button";
 import { handleFetch } from "../utils/handleFetch";
-import FormModal from "./FormModal";
+import DeleteModal from "./DeleteModal";
+import parse from "html-react-parser";
+import { FaUser, FaCalendar, FaTags } from "react-icons/fa";
+import { useRef } from "react";
 
 const PostDetails = () => {
   const fetcher = useFetcher();
   const data = useLoaderData();
+  console.log(data);
   const {
     userObject: [userObject],
   } = useOutletContext();
 
   const [input, setInput] = useState({ newInput: "", editInput: "" });
   const [edit, setEdit] = useState(null);
-  const [deleteBtn, setDeleteBtn] = useState(null);
+  const [modal, setModal] = useState(false);
+  const commentId = useRef(null);
 
   const onShow = (e) => {
     const comment = data.comments.find((comment) => comment.id === e.target.id);
     setInput({ ...input, editInput: comment.text });
     setEdit(e.target.id);
   };
+
+  const handleModal = (e) => {
+    setModal(true);
+    commentId.current = e.target.id;
+  };
+
+  const dt = DateTime.fromISO(data.createdAt).toLocaleString();
 
   useEffect(() => {
     if (fetcher.state === "idle") {
@@ -38,34 +51,69 @@ const PostDetails = () => {
     <>
       <main className={styles.mainContainer}>
         {data ? (
-          <article className={styles.postDetails}>
-            <section className="post-details-title">
-              <h3>{data.title}</h3>
-            </section>
-            <section className="post-details">
-              <div className="post-user">
-                <small>{data.userId}</small>
-              </div>
-              <div className="post-createdAt">
-                <small>{new DateTime(data.createdAt).toLocaleString()}</small>
-              </div>
-            </section>
-            <section className="post-text">
-              <p>{data.text}</p>
-            </section>
-            <section className="comments-section">
-              <h3>Comments: </h3>
-              {data.comments ? (
-                <>
-                  {Object.values(data.comments).map((comment) => {
-                    return (
-                      <article
-                        className={styles.comment}
-                        id={comment.id}
-                        key={comment.id}
-                      >
-                        <section className="comment-text">
-                          <div className="comment-text">
+          <section className={styles.postSection}>
+            <article className={styles.post}>
+              <section className={styles.postInfo}>
+                <div className={styles.postTitle}>
+                  <h3>{data.title}</h3>
+                </div>
+
+                <section className={styles.postCreateDetails}>
+                  <small>
+                    <FaUser /> User:
+                  </small>
+                  <small> {data.user.username} </small>
+                  <small>
+                    <FaCalendar /> Created:
+                  </small>
+                  <small>{dt}</small>
+                </section>
+                <section className={styles.postCategories}>
+                  <small>Categories: </small>
+                  {data.categories.length > 0
+                    ? data.categories.map((category) => {
+                        return (
+                          <small key={category.category.id}>
+                            {category.category.title + " "}
+                          </small>
+                        );
+                      })
+                    : null}
+                </section>
+                <div className={styles.postDivider}></div>
+              </section>
+
+              <section className={styles.postText}>{parse(data.text)}</section>
+              <div className={styles.postDivider}></div>
+              <section className={styles.tagsSection}>
+                <small>
+                  <FaTags />
+                </small>
+                <h3>Tags: </h3>
+                {data.tags.length > 0
+                  ? data.tags.map((tag) => {
+                      if (tag.title !== "") {
+                        return (
+                          <div key={tag.title} className={styles.tag}>
+                            <small>{tag.title + " "}</small>
+                          </div>
+                        );
+                      }
+                    })
+                  : null}
+              </section>
+              <section className={styles.commentsSection}>
+                {data.comments ? (
+                  <>
+                    {Object.values(data.comments).map((comment) => {
+                      return (
+                        <article
+                          className={styles.comment}
+                          id={comment.id}
+                          key={comment.id}
+                        >
+                          <h3>Comments: </h3>
+                          <section className={styles.commentTextSection}>
                             {edit === comment.id ? (
                               <>
                                 <>
@@ -78,10 +126,11 @@ const PostDetails = () => {
                                       name="id"
                                       value={comment.id}
                                     />
-                                    <input
+                                    <textarea
                                       id="comment_text"
                                       name="comment_text"
                                       value={input.editInput}
+                                      placeholder="Write a comment..."
                                       onChange={(e) =>
                                         setInput({
                                           ...input,
@@ -89,7 +138,7 @@ const PostDetails = () => {
                                         })
                                       }
                                       required={true}
-                                    ></input>
+                                    ></textarea>
                                     <div className="buttons-container">
                                       <Button
                                         text="Submit"
@@ -103,80 +152,93 @@ const PostDetails = () => {
                                 </>
                               </>
                             ) : (
-                              <p>{comment.text}</p>
+                              <>
+                                <div className={styles.commentText}>
+                                  <p>{comment.text}</p>
+                                </div>
+                                <div className={styles.commentCreationDetails}>
+                                  <small>
+                                    <FaCalendar /> Created:
+                                    {new DateTime(
+                                      comment.createdAt
+                                    ).toLocaleString()}
+                                  </small>
+                                  <small>
+                                    <FaUser /> User: {comment.user.username}
+                                  </small>
+                                </div>
+                              </>
                             )}
-                          </div>
-                          {userObject.username === comment.user.username ? (
-                            <>
-                              <div className="buttons-container">
-                                {!edit ? (
-                                  <>
-                                    <Button
-                                      text={"EDIT"}
-                                      type="button"
-                                      id={comment.id}
-                                      onClick={onShow}
-                                    ></Button>
-                                    <Button
-                                      type="button"
-                                      text="DELETE"
-                                      id={comment.id}
-                                      onClick={(e) => setDeleteBtn(e.target.id)}
-                                    ></Button>
-                                  </>
-                                ) : null}
-                              </div>
-                            </>
-                          ) : null}
-                        </section>
-                        <section className="comment-details">
-                          <div className="comment-createdAt">
-                            <small>
-                              {new DateTime(comment.createdAt).toLocaleString()}
-                            </small>
-                          </div>
-                          <div className="comment-user">
-                            <small>User: {comment.user.username}</small>
-                          </div>
-                        </section>
-                      </article>
-                    );
-                  })}
-                </>
-              ) : null}
-              <section className="create-comment-section">
-                <section className={styles.postCommentTitle}>
-                  <h3>Post Comment: </h3>
-                </section>
-                <fetcher.Form method="POST">
-                  <div className="form-group">
-                    <label htmlFor="comment_text"></label>
-                    <input
-                      type="text"
-                      id="comment_text"
-                      name="comment_text"
-                      value={input.newInput}
-                      onChange={(e) =>
-                        setInput({ ...input, newInput: e.target.value })
-                      }
-                      required={true}
+
+                            {userObject.username === comment.user.username ? (
+                              <>
+                                <div className={styles.commentButtonContainer}>
+                                  {!edit ? (
+                                    <>
+                                      <Button
+                                        text={"EDIT"}
+                                        type="button"
+                                        id={comment.id}
+                                        onClick={onShow}
+                                      ></Button>
+                                      <Button
+                                        type="button"
+                                        text="DELETE"
+                                        id={comment.id}
+                                        onClick={handleModal}
+                                      ></Button>
+                                    </>
+                                  ) : null}
+                                </div>
+                              </>
+                            ) : null}
+                          </section>
+                          <section className="comment-details"></section>
+                        </article>
+                      );
+                    })}
+                  </>
+                ) : null}
+
+                <section className={styles.createCommentSection}>
+                  <section className={styles.postCommentTitle}>
+                    <h3>Post Comment: </h3>
+                  </section>
+                  <fetcher.Form method="POST">
+                    <div className="form-group">
+                      <label htmlFor="comment_text"></label>
+                      <textarea
+                        type="text"
+                        id="comment_text"
+                        name="comment_text"
+                        placeholder="Write a comment..."
+                        value={input.newInput}
+                        onChange={(e) =>
+                          setInput({ ...input, newInput: e.target.value })
+                        }
+                        required={true}
+                      />
+                    </div>
+                    <Button
+                      text="Submit"
+                      type="submit"
+                      name={"intent"}
+                      value={"submit"}
                     />
-                  </div>
-                  <Button
-                    text="Submit"
-                    type="submit"
-                    name={"intent"}
-                    value={"submit"}
-                  />
-                </fetcher.Form>
+                  </fetcher.Form>
+                </section>
               </section>
-            </section>
-            {deleteBtn ? (
+            </article>
+            {modal ? (
               <>
-                <FormModal commentId={deleteBtn} />
+                <DeleteModal
+                  commentId={commentId.current}
+                  modal={modal}
+                  setModal={setModal}
+                />
               </>
             ) : null}
-          </article>
+          </section>
         ) : null}
       </main>
     </>
