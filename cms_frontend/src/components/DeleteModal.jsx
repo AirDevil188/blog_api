@@ -3,9 +3,17 @@ import Button from "./Button";
 import PropTypes from "prop-types";
 import { useFetcher } from "react-router-dom";
 import styles from "./DeleteModal.module.css";
+import { useEffect } from "react";
 
 const DeleteModal = ({ postId, modal, setModal }) => {
   const fetcher = useFetcher();
+
+  useEffect(() => {
+    console.log(fetcher.state);
+    if (fetcher.state === "loading") {
+      setModal(false);
+    }
+  }, [fetcher.state]);
 
   return (
     <>
@@ -16,10 +24,7 @@ const DeleteModal = ({ postId, modal, setModal }) => {
               <div className={styles.textContainer}>
                 <p>Are you sure that you want to delete this post?</p>
               </div>
-              <fetcher.Form
-                action={`/posts/post/delete/${postId}`}
-                method="post"
-              >
+              <fetcher.Form action={``} method="post">
                 <input type="hidden" name="id" value={postId} />
                 <div className={styles.buttonContainer}>
                   <Button
