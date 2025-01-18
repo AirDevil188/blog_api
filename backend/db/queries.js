@@ -134,6 +134,13 @@ async function getPost(id) {
             id: false,
           },
         },
+        user: {
+          select: {
+            username: true,
+            id: false,
+            password: false,
+          },
+        },
       },
     });
   } catch (err) {
