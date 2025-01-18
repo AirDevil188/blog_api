@@ -41,14 +41,13 @@ const getUpdatePost = asyncHandler(async (req, res, next) => {
 
   const tagArr = [];
   post.tags.map((tag) => {
-    tagArr.push(tag.title);
+    tagArr.push({ input: tag.title });
   });
-  const tags = tagArr.toString().replaceAll(",", ", ");
 
   if (!post) {
     return res.status(404).json({ message: "Post Not Found!" });
   }
-  return res.json({ postCategories, allCategories, post, tags });
+  return res.json({ postCategories, allCategories, post, tagArr });
 });
 
 const updatePost = asyncHandler(async (req, res, next) => {
