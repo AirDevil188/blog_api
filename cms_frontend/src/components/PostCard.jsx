@@ -4,7 +4,7 @@ import InputWrapper from "./InputWrapper";
 import { Editor } from "@tinymce/tinymce-react";
 import styles from "../components/Button.module.css";
 import { useFetcher } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import stylesPostCard from "./PostCard.module.css";
 
 const PostCard = ({ edit, categories }) => {
@@ -19,6 +19,29 @@ const PostCard = ({ edit, categories }) => {
         return postCategory.category.id;
       })
     : null;
+  useEffect(() => {
+    if (edit) {
+      setTags(edit.tagArr);
+    }
+  }, []);
+
+  const handleTagSubmission = () => {
+    const checkTags = tags.map((tag) => tag.input).includes(input);
+    if (input && !checkTags) {
+      setTags((prevState) => [...prevState, { input }]);
+    } else return;
+    setInput("");
+  };
+
+  const handleTagDelete = (e) => {
+    setTags(tags.filter((tag) => tag.input !== e.target.id));
+  };
+
+  const handleInputChange = (event) => {
+    setInput(event.target.value);
+  };
+  const [tags, setTags] = useState([]);
+  const [input, setInput] = useState(null);
 
   return (
     <>
@@ -64,15 +87,42 @@ const PostCard = ({ edit, categories }) => {
             }}
             initialValue={edit ? edit.post.text : "Write post..."}
           />
-
-          <InputWrapper
-            label="Create tags: "
-            type="text"
-            id="tags"
-            name="tags"
-            value={edit ? edit.tags : null}
-            isRequired={true}
-          />
+          <div className={stylesPostCard.formTags}>
+            <label htmlFor="">Create Tags: </label>
+            <input type="text " onChange={handleInputChange} value={input} />
+            <div className={stylesPostCard.tagsContainer}>
+              {tags.length > 0 ? (
+                <>
+                  {tags.map((tag) => {
+                    if (tag.input !== "") {
+                      return (
+                        <div
+                          key={tag.input}
+                          onClick={handleTagDelete}
+                          className={stylesPostCard.tag}
+                          id={tag.input}
+                        >
+                          {tag.input}
+                          <small className={stylesPostCard.deleteIcon}>X</small>
+                          <input
+                            type="hidden"
+                            name="tags"
+                            id="tags"
+                            value={tag.input}
+                          />
+                        </div>
+                      );
+                    } else null;
+                  })}
+                </>
+              ) : null}
+            </div>
+            <Button
+              text="CREATE"
+              onClick={handleTagSubmission}
+              type="button"
+            ></Button>
+          </div>
 
           <div className="form-group">
             <p className={stylesPostCard.categoriesHeading}>Categories: </p>
