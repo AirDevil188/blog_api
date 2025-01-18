@@ -126,9 +126,6 @@ export const handleSubmit = async ({ request }) => {
   const button = data.get("intent");
 
   switch (button) {
-    case "edit":
-      return redirect(`posts/post/update/${formData.id}`);
-
     case "delete":
       await handleFetch(
         `/posts/post/delete/${formData.id}`,
