@@ -1,31 +1,103 @@
-.mainContainer {
-  padding: 1rem;
+form {
+  padding: 0;
 }
 
-.postDetails {
-  display: flex;
+.postSection {
+  display: grid;
+  grid-template-rows: 1fr;
+  height: 100%;
   width: 100%;
-  padding: 1rem;
-  flex-flow: column wrap;
-  color: #000;
 }
 
+.post {
+  display: grid;
+  grid-auto-rows: auto;
+}
+
+.postTitle {
+  font-size: 4rem;
+}
+
+.postDivider {
+  border: 1px solid #3e362e;
+  width: 100%;
+}
+
+.postCreateDetails {
+  display: flex;
+  gap: 5px;
+}
+
+.postText {
+  display: flex;
+  flex-flow: column wrap;
+  padding: 1rem;
+  grid-row: 2/3;
+  font-size: 1.2rem;
+}
+
+.postInfo {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  grid-row: 1/1;
+}
+
+.postCreateDetails {
+  display: flex;
+  gap: 5px;
+}
+
+.postCommentsSection {
+  padding: 1rem;
+}
 .comment {
   display: flex;
   flex-flow: column wrap;
+  gap: 10px;
+}
+
+.commentTextSection {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 10px;
+}
+.commentText {
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+
+.commentCreationDetails {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 3px;
+}
+
+.commentButtonContainer {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
+}
+
+.tagsSection {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.tag {
+  padding: 5px;
+  background-color: #3e362e;
+  color: #fff;
+  cursor: pointer;
 }
 
 .buttonsContainer {
   display: flex;
   flex-flow: column wrap;
   align-items: flex-start;
-  gap: 10px;
-}
-
-form {
-  padding: 0;
-}
-
-.postCommentTitle {
-  padding-top: 20px;
+  padding-top: 10px;
 }
