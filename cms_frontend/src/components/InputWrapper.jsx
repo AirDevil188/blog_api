@@ -10,6 +10,7 @@ const InputWrapper = ({
   id,
   value,
   check,
+  onChange,
 }) => {
   return (
     <div className={styles[className]}>
@@ -21,6 +22,7 @@ const InputWrapper = ({
         name={name}
         defaultValue={value}
         defaultChecked={check}
+        onChange={onChange}
       />
     </div>
   );
@@ -35,6 +37,7 @@ InputWrapper.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([string, bool]),
   check: PropTypes.bool,
+  onChange: PropTypes.string,
 };
 
 export default InputWrapper;
