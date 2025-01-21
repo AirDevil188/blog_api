@@ -41,7 +41,7 @@ const PostCard = ({ edit, categories }) => {
     setInput(event.target.value);
   };
   const [tags, setTags] = useState([]);
-  const [input, setInput] = useState(null);
+  const [input, setInput] = useState("");
 
   return (
     <>
@@ -103,7 +103,7 @@ const PostCard = ({ edit, categories }) => {
                           id={tag.input}
                         >
                           {tag.input}
-                          <small className={stylesPostCard.deleteIcon}>X</small>
+
                           <input
                             type="hidden"
                             name="tags"
