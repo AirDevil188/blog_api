@@ -48,6 +48,7 @@ const NavBar = ({ user, setUserObject, hamburger, setHamburger }) => {
               </>
             ) : (
               <>
+                <Link to={"/new-post"}>New Post</Link>
                 <li onClick={handleLogOut}>Log Out</li>
               </>
             )}
