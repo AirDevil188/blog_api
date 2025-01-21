@@ -52,11 +52,6 @@ const Router = () => {
           element: <NewCategory />,
           action: handleCategorySubmit,
         },
-
-        {
-          path: "/categories",
-          loader: getCategories,
-        },
       ],
     },
   ]);
