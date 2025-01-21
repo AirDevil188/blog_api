@@ -1,9 +1,4 @@
-import {
-  redirect,
-  useFetcher,
-  useLoaderData,
-  useOutletContext,
-} from "react-router-dom";
+import { redirect, useLoaderData, useOutletContext } from "react-router-dom";
 import { DateTime } from "luxon";
 import styles from "../components/PostDetails.module.css";
 import parse from "html-react-parser";
