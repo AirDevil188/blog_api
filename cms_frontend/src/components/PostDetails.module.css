@@ -2,6 +2,10 @@ form {
   padding: 0;
 }
 
+.mainContainer {
+  height: 100vh;
+}
+
 .postSection {
   display: grid;
   grid-template-rows: 1fr;
