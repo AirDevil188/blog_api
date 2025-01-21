@@ -27,12 +27,24 @@ body {
 }
 
 main {
-  height: 100vh;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+
+label {
+  font-weight: 500;
+}
+
+button {
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  background-color: var(---btn-bg-color);
+  color: #fff;
+  border: none;
 }
 
 footer {
