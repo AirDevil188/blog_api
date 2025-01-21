@@ -4,7 +4,6 @@
 
 header {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
   padding: 1rem;
   background-color: var(---header-bg-color);
   color: #fff;
@@ -16,6 +15,7 @@ menu {
   font-size: 1.2rem;
   text-transform: uppercase;
   font-weight: 800;
+  align-items: center;
 }
 
 a {
@@ -32,6 +32,7 @@ li {
   flex-flow: column wrap;
   align-items: flex-end;
   grid-column: 3/3;
+  align-self: center;
 }
 
 .nav {
