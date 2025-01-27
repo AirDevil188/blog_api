@@ -1,5 +1,5 @@
 const host =
-  import.meta.env.MODE === "development" ? "http://localhost:3000" : "http";
+  import.meta.env.MODE === "development" ? "http://localhost:3000" : "https";
 
 console.log(host);
 
