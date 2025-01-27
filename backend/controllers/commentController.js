@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const db = require("../db/queries");
 
 const createComment = asyncHandler(async (req, res, next) => {
-  console.log(req.user);
   const { text } = req.body;
   const data = await db.createComment(text, req.params.postId, req.user.user);
   return res.json(data);

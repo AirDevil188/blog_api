@@ -1,6 +1,5 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const jwt = require("./config/jwt");
 const cors = require("cors");
 
 dotenv.config();
