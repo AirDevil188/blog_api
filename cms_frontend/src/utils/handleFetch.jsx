@@ -1,4 +1,5 @@
-const host = "http";
+const host =
+  import.meta.env.MODE === "development" ? "http://localhost:3000" : "http";
 
 export const handleFetch = async (endPoint, input = undefined, method) => {
   const token = localStorage.getItem("token");
