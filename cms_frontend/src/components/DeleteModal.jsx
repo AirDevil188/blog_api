@@ -9,7 +9,6 @@ const DeleteModal = ({ postId, modal, setModal }) => {
   const fetcher = useFetcher();
 
   useEffect(() => {
-    console.log(fetcher.state);
     if (fetcher.state === "loading") {
       setModal(false);
     }
