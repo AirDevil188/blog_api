@@ -1,7 +1,7 @@
 const host =
-  import.meta.env.MODE === "development" ? "http://localhost:3000" : "https";
-
-console.log(host);
+  import.meta.env.MODE === "development"
+    ? "http://localhost:3000"
+    : window.location.host;
 
 export const handleFetch = async (endPoint, input = undefined, method) => {
   const token = localStorage.getItem("token");
